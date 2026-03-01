@@ -1,7 +1,8 @@
 name: flutter_dubov_system
-description: "A new Flutter package project."
+description: High-performance Flutter wrapper for the FIDE-approved CPPDubovSystem engine. Enables official chess tournament pairings on the web using C++ compiled to WebAssembly.
 version: 0.0.1
-repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system
+homepage: https://github.com/khalil212002/flutter_dubov_system
+repository: https://github.com/khalil212002/flutter_dubov_system/flutter_dubov_system
 publish_to: none
 
 environment:
