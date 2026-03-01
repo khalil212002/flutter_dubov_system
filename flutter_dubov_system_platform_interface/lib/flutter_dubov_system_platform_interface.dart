@@ -22,8 +22,8 @@ abstract class PlatformDubovSystem extends PlatformInterface {
 
   Future<void> initialize();
   int getMaxUpfloatTimes(int totalRounds);
-  PlatformPlayer createPlayer(String name, int rating, int id, double points);
-  PlatformTournament createTournament(int totalRounds);
+  Player createPlayer(String name, int rating, int id, double points);
+  Tournament createTournament(int totalRounds);
 }
 
 class DefaultDubovSystem extends PlatformDubovSystem {
@@ -38,12 +38,12 @@ class DefaultDubovSystem extends PlatformDubovSystem {
   }
 
   @override
-  PlatformPlayer createPlayer(String name, int rating, int id, double points) {
+  Player createPlayer(String name, int rating, int id, double points) {
     throw UnimplementedError();
   }
 
   @override
-  PlatformTournament createTournament(int totalRounds) {
+  Tournament createTournament(int totalRounds) {
     throw UnimplementedError();
   }
 }

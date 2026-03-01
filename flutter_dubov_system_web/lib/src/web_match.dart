@@ -6,5 +6,5 @@ class Match extends ds.Match {
   @override
   WebPlayer get white => super.white as WebPlayer;
   @override
-  ds.PlatformPlayer get black => super.black as WebPlayer;
+  ds.Player get black => super.black as WebPlayer;
 }

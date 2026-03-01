@@ -4,12 +4,12 @@ import 'dart:js_interop_unsafe';
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 import 'package:flutter_dubov_system_web/src/dubov_system_interop.dart';
 
-class WebPlayer extends PlatformPlayer {
-  late final Player _wasmPlayer;
+class WebPlayer extends Player {
+  late final JSPlayer _wasmPlayer;
   final DubovModule _module;
 
   WebPlayer(this._module) {
-    _wasmPlayer = _module.Player.callAsConstructor<Player>();
+    _wasmPlayer = _module.Player.callAsConstructor<JSPlayer>();
   }
 
   WebPlayer.fromJs(this._module, this._wasmPlayer);
@@ -34,7 +34,7 @@ class WebPlayer extends PlatformPlayer {
     _wasmPlayer.delete();
   }
 
-  Player get toJs => _wasmPlayer;
+  JSPlayer get toJs => _wasmPlayer;
 
   @override
   // ignore: non_constant_identifier_names
@@ -72,7 +72,7 @@ class WebPlayer extends PlatformPlayer {
   }
 
   @override
-  bool canPlayOpp(PlatformPlayer opp) {
+  bool canPlayOpp(Player opp) {
     return _wasmPlayer.canPlayOpp((opp as WebPlayer)._wasmPlayer).toDart;
   }
 
@@ -116,7 +116,7 @@ class WebPlayer extends PlatformPlayer {
   }
 
   @override
-  bool isColorHistEqual(PlatformPlayer opp) {
+  bool isColorHistEqual(Player opp) {
     return _wasmPlayer.isColorHistEqual((opp as WebPlayer)._wasmPlayer).toDart;
   }
 
@@ -154,7 +154,7 @@ class WebPlayer extends PlatformPlayer {
   }
 
   @override
-  bool shouldAlternate(PlatformPlayer opp) {
+  bool shouldAlternate(Player opp) {
     return _wasmPlayer.shouldAlternate((opp as WebPlayer)._wasmPlayer).toDart;
   }
 

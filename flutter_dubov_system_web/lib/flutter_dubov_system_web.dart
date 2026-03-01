@@ -64,7 +64,7 @@ class DubovSystemWeb extends PlatformDubovSystem {
   }
 
   @override
-  PlatformPlayer createPlayer(String name, int rating, int id, double points) {
+  Player createPlayer(String name, int rating, int id, double points) {
     if (_module.isNull) {
       throw Exception(
         "Dubov System is not initialize. you need to call initialize() first.",
@@ -74,7 +74,7 @@ class DubovSystemWeb extends PlatformDubovSystem {
   }
 
   @override
-  PlatformTournament createTournament(int totalRounds) {
+  Tournament createTournament(int totalRounds) {
     if (_module.isNull) {
       throw Exception(
         "Dubov System is not initialize. you need to call initialize() first.",

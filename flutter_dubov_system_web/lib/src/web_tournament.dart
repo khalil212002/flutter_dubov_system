@@ -5,9 +5,9 @@ import 'package:flutter_dubov_system_web/src/dubov_system_interop.dart';
 import 'package:flutter_dubov_system_web/src/web_player.dart';
 import 'web_match.dart' as w;
 
-class WebTournament extends PlatformTournament {
+class WebTournament extends Tournament {
   final DubovModule _module;
-  late final Tournament _wasmTournament;
+  late final JSTournament _wasmTournament;
 
   WebTournament(this._module, int totalRounds) : super(totalRounds) {
     _wasmTournament = _module.Tournament.callAsConstructor(totalRounds.toJS);
@@ -19,7 +19,7 @@ class WebTournament extends PlatformTournament {
   }
 
   @override
-  void addPlayer(PlatformPlayer p) {
+  void addPlayer(Player p) {
     _wasmTournament.addPlayer((p as WebPlayer).toJs);
   }
 

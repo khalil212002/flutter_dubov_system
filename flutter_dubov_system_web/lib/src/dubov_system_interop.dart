@@ -38,7 +38,7 @@ extension type ColorPreferenceEnumObject._(JSObject _) implements JSObject {
 }
 
 @JS()
-extension type Player._(JSObject _) implements JSObject {
+extension type JSPlayer._(JSObject _) implements JSObject {
   external JSString getName();
   external JSNumber getRating();
   external JSNumber getID();
@@ -59,19 +59,19 @@ extension type Player._(JSObject _) implements JSObject {
   external void addPoints(JSNumber points);
   external void setByeStatus(JSBoolean status);
   external void addPairingRestriction(JSNumber oppId);
-  external JSBoolean canPlayOpp(Player opp);
+  external JSBoolean canPlayOpp(JSPlayer opp);
   external JSBoolean canUpfloat(JSNumber cr);
-  external JSBoolean shouldAlternate(Player opp);
-  external JSBoolean isColorHistEqual(Player opp);
+  external JSBoolean shouldAlternate(JSPlayer opp);
+  external JSBoolean isColorHistEqual(JSPlayer opp);
   external void delete();
 }
 
 @JS()
 extension type Match._(JSObject _) implements JSObject {
-  external Player get white;
-  external set white(Player v);
-  external Player get black;
-  external set black(Player v);
+  external JSPlayer get white;
+  external set white(JSPlayer v);
+  external JSPlayer get black;
+  external set black(JSPlayer v);
   external JSBoolean get is_bye;
   external set is_bye(JSBoolean v);
   external void delete();
@@ -85,8 +85,8 @@ extension type VectorMatch._(JSObject _) implements JSObject {
 }
 
 @JS()
-extension type Tournament._(JSObject _) implements JSObject {
-  external void addPlayer(Player p);
+extension type JSTournament._(JSObject _) implements JSObject {
+  external void addPlayer(JSPlayer p);
   external void setRound1Color(JSBoolean makeWhite);
   external VectorMatch generatePairings(JSNumber round);
   external VectorMatch generatePairingsBaku(JSNumber round, JSBoolean baku);
