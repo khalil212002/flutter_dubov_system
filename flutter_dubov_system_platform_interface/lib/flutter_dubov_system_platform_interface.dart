@@ -7,24 +7,38 @@ export "src/platform_color_preference.dart";
 export "src/platfrom_tournament.dart";
 export "src/platform_match.dart";
 
+/// The common platform interface for the Dubov System plugin.
 abstract class PlatformDubovSystem extends PlatformInterface {
+  /// Constructs a PlatformDubovSystem.
   PlatformDubovSystem() : super(token: _token);
 
   static final Object _token = Object();
   static PlatformDubovSystem _instance = DefaultDubovSystem(); // Fallback
 
+  /// The default instance of [PlatformDubovSystem] to use.
   static PlatformDubovSystem get instance => _instance;
 
+  /// Platform-specific plugins should set this with their own platform-specific
+  /// class that extends [PlatformDubovSystem] when they register themselves.
   static set instance(PlatformDubovSystem instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
 
+  /// Initializes the platform-specific Dubov system.
   Future<void> initialize();
+
+  /// Creates a platform-specific [Player] with the given [name], [rating], [id], and [points].
   Player createPlayer(String name, int rating, int id, double points);
+
+  /// Creates a platform-specific [Tournament] with the given number of [totalRounds].
   Tournament createTournament(int totalRounds);
 }
 
+/// The default fallback implementation of [PlatformDubovSystem].
+///
+/// Throws an [UnimplementedError] for all methods until a platform-specific
+/// implementation is registered.
 class DefaultDubovSystem extends PlatformDubovSystem {
   @override
   Future<void> initialize() {
