@@ -1,0 +1,10 @@
+// THIRD-PARTY-NOTICES.txt
+
+This project includes software developed by Michael Shapiro (CPPDubovSystem).
+Copyright 2024 Michael Shapiro.
+Licensed under the Apache License, Version 2.0.
+Source: https://github.com/MichaelVShapiro/CPPDubovSystem
+
+Modifications:
+- Compiled into WebAssembly using Emscripten.
+- Added Emscripten bindings (bindings.cpp) to expose Player and Tournament classes.
