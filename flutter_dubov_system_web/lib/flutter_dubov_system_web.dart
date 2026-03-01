@@ -58,12 +58,6 @@ class DubovSystemWeb extends PlatformDubovSystem {
   }
 
   @override
-  //TODO
-  int getMaxUpfloatTimes(int totalRounds) {
-    throw UnimplementedError();
-  }
-
-  @override
   Player createPlayer(String name, int rating, int id, double points) {
     if (_module.isNull) {
       throw Exception(

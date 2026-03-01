@@ -21,7 +21,6 @@ abstract class PlatformDubovSystem extends PlatformInterface {
   }
 
   Future<void> initialize();
-  int getMaxUpfloatTimes(int totalRounds);
   Player createPlayer(String name, int rating, int id, double points);
   Tournament createTournament(int totalRounds);
 }
