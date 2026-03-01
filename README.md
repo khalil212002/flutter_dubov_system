@@ -1,7 +1,7 @@
 # Flutter Dubov System (FIDE-Approved Matchmaking)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Platform-Flutter-02569B?logo=flutter)](https://flutter.dev/)
+[![pub package](https://img.shields.io/pub/v/flutter_dubov_system.svg)](https://pub.dev/packages/flutter_dubov_system)
 
 A federated Flutter plugin that brings the **FIDE-approved [CPPDubovSystem](https://github.com/MichaelVShapiro/CPPDubovSystem/tree/main) engine** to the Dart ecosystem. This repository gives you the tools to generate official, completely accurate **Swiss system chess tournament pairings** right inside your Flutter apps.
 
