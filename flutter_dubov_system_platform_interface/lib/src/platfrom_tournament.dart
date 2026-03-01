@@ -7,7 +7,7 @@ abstract class Tournament {
   void addPlayer(Player p);
   void setRound1Color(bool makeWhite);
   bool pairingErrorOccured();
-  List<Match> generatePairings(int r);
+  List<MatchPairing> generatePairings(int r);
 
   void dispose();
 }

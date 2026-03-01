@@ -1,4 +1,6 @@
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
+export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart'
+    show MatchPairing;
 
 class DubovSystem {
   static Future<void> initialize() {
