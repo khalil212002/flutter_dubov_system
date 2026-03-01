@@ -3,7 +3,6 @@ description: High-performance Flutter wrapper for the FIDE-approved CPPDubovSyst
 version: 0.0.1
 homepage: https://github.com/khalil212002/flutter_dubov_system
 repository: https://github.com/khalil212002/flutter_dubov_system/flutter_dubov_system
-publish_to: none
 
 environment:
   sdk: ^3.11.0
@@ -12,10 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_dubov_system_platform_interface:
-    path: ../flutter_dubov_system_platform_interface
-  flutter_dubov_system_web:
-    path: ../flutter_dubov_system_web
+  flutter_dubov_system_platform_interface: ^0.0.1
+  flutter_dubov_system_web: ^0.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
