@@ -75,6 +75,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dubov_system_platform_interface:
+    dependency: transitive
+    description:
+      path: "../../flutter_dubov_system_platform_interface"
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter_dubov_system_web:
     dependency: "direct main"
     description:

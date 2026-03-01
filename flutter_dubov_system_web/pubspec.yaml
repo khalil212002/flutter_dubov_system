@@ -2,10 +2,11 @@ name: flutter_dubov_system_web
 description: "A new Flutter plugin project."
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
   sdk: ^3.11.0
-  flutter: '>=3.3.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
@@ -14,6 +15,9 @@ dependencies:
     sdk: flutter
   web: ^1.0.0
   plugin_platform_interface: ^2.0.2
+
+  flutter_dubov_system_platform_interface:
+    path: ../flutter_dubov_system_platform_interface
 
 dev_dependencies:
   flutter_test:
@@ -38,8 +42,8 @@ flutter:
   plugin:
     platforms:
       web:
-        pluginClass: FlutterDubovSystemWebWeb
-        fileName: flutter_dubov_system_web_web.dart
+        pluginClass: DubovSystemWeb
+        fileName: flutter_dubov_system_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
@@ -51,6 +55,9 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
+  assets:
+    - vendor/dubov_system/dubov.js
+    - vendor/dubov_system/dubov.wasm
 
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
