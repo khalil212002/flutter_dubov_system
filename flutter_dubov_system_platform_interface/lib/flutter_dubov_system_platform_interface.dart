@@ -32,11 +32,6 @@ class DefaultDubovSystem extends PlatformDubovSystem {
   }
 
   @override
-  int getMaxUpfloatTimes(int totalRounds) {
-    throw UnimplementedError();
-  }
-
-  @override
   Player createPlayer(String name, int rating, int id, double points) {
     throw UnimplementedError();
   }
