@@ -1,5 +1,15 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
+
+class DubovSystem {
+  static Future<void> initialize() {
+    return PlatformDubovSystem.instance.initialize();
+  }
+
+  static Player createPlayer(String name, int rating, int id, double points) {
+    return PlatformDubovSystem.instance.createPlayer(name, rating, id, points);
+  }
+
+  static Tournament createTournament(int totalRounds) {
+    return PlatformDubovSystem.instance.createTournament(totalRounds);
+  }
 }
