@@ -1,7 +1,7 @@
 name: flutter_dubov_system_platform_interface
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system_platform_interface
 
 environment:
   sdk: ^3.11.0

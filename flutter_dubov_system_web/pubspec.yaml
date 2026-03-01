@@ -1,7 +1,7 @@
 name: flutter_dubov_system_web
 description: "A new Flutter plugin project."
 version: 0.0.1
-homepage:
+repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system_web
 publish_to: none
 
 environment:
