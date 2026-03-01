@@ -6,6 +6,7 @@ import 'package:flutter_dubov_system_web/src/web_tournament.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'dart:js_interop';
 import 'package:web/web.dart' as web;
+export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 
 @JS('DubovSystem')
 external JSPromise<DubovModule> _initDubovSystem([DubovModuleConfig config]);
