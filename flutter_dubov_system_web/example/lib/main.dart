@@ -16,7 +16,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
   // Instance of the web implementation
   final DubovSystemWeb _ds = DubovSystemWeb();
   bool _isInitialized = false;
-  List<Match> _round1Pairings = [];
+  List<MatchPairing> _round1Pairings = [];
   String _errorMessage = '';
 
   @override
