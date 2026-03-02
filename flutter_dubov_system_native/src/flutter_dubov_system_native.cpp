@@ -4,6 +4,10 @@
 #include <stdlib.h> // Required for malloc/free
 #include "CPPDubovSystem/DubovSystem/Player.hpp"
 #include "CPPDubovSystem/DubovSystem/Tournament.hpp"
+#include <vector>
+#include <string>
+
+using namespace CPPDubovSystem;
 
 extern "C" {
 
@@ -90,6 +94,14 @@ extern "C" {
         return arr;
     }
 
+    FFI_PLUGIN_EXPORT int getOppCount(PlayerHandle player) {
+        return static_cast<Player*>(player)->getOppCount();
+    }
+
+    FFI_PLUGIN_EXPORT double getARO(PlayerHandle player) {
+        return static_cast<Player*>(player)->getARO();
+    }
+
     FFI_PLUGIN_EXPORT bool canUpfloat(PlayerHandle player, int cr){
         return static_cast<Player*>(player)->canUpfloat(cr);
 	}
@@ -122,6 +134,50 @@ extern "C" {
 
     FFI_PLUGIN_EXPORT int getMaxUpfloatTimes(int total_rounds) {
         return Player::getMaxUpfloatTimes(total_rounds);
+    }
+
+    FFI_PLUGIN_EXPORT int getID(PlayerHandle player) {
+        return static_cast<Player*>(player)->getID();
+    }
+
+    FFI_PLUGIN_EXPORT int getRating(PlayerHandle player) {
+        return static_cast<Player*>(player)->getRating();
+    }
+
+    FFI_PLUGIN_EXPORT void addOpp(PlayerHandle player, int id) {
+        static_cast<Player*>(player)->addOpp(id);
+    }
+
+    FFI_PLUGIN_EXPORT void addOppRating(PlayerHandle player, int rating) {
+        static_cast<Player*>(player)->addOppRating(rating);
+    }
+
+    FFI_PLUGIN_EXPORT void addPairingRestriction(PlayerHandle player, int oppId) {
+        static_cast<Player*>(player)->addPairingRestriction(oppId);
+    }
+
+    FFI_PLUGIN_EXPORT void addPoints(PlayerHandle player, double points) {
+        static_cast<Player*>(player)->addPoints(points);
+    }
+
+    FFI_PLUGIN_EXPORT void setByeStatus(PlayerHandle player, bool status) {
+        static_cast<Player*>(player)->setByeStatus(status);
+    }
+
+    FFI_PLUGIN_EXPORT void setUpfloatPrevStatus(PlayerHandle player, bool status) {
+        static_cast<Player*>(player)->setUpfloatPrevStatus(status);
+    }
+
+    FFI_PLUGIN_EXPORT void incrementUpfloat(PlayerHandle player) {
+        static_cast<Player*>(player)->incrementUpfloat();
+    }
+
+    FFI_PLUGIN_EXPORT bool shouldAlternate(PlayerHandle player, PlayerHandle opp) {
+        return static_cast<Player*>(player)->shouldAlternate(*static_cast<Player*>(opp));
+    }
+    
+    FFI_PLUGIN_EXPORT bool canPlayOpp(PlayerHandle player, PlayerHandle opp) {
+        return static_cast<Player*>(player)->canPlayOpp(*static_cast<Player*>(opp));
     }
 
 
@@ -189,4 +245,6 @@ extern "C" {
 
         return arr;
     }
+
+    
 }
