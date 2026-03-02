@@ -1,4 +1,4 @@
-#include "flutter_dubov_system_native.hpp"
+#include "flutter_dubov_system_native.h"
 #include <stdbool.h>
 #include <string.h> // Required for strdup
 #include <stdlib.h> // Required for malloc/free
