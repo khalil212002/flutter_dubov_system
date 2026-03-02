@@ -4,13 +4,12 @@ description: |
   Bindings for `src/flutter_dubov_system_native.h`.
 
   Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
-output: 'lib/flutter_dubov_system_native_bindings_generated.dart'
+output: "lib/flutter_dubov_system_native_bindings_generated.dart"
 headers:
   entry-points:
-    - 'src/flutter_dubov_system_native.h'
-  include-directives:
-    - 'src/flutter_dubov_system_native.h'
+    - "src/flutter_dubov_system_native.h"
 ffi-native:
+  asset-id: "flutter_dubov_system_native"
 comments:
   style: any
   length: full
