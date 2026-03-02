@@ -1,0 +1,16 @@
+# Run with `dart run ffigen --config ffigen.yaml`.
+name: FlutterDubovSystemNativeBindings
+description: |
+  Bindings for `src/flutter_dubov_system_native.h`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/flutter_dubov_system_native_bindings_generated.dart'
+headers:
+  entry-points:
+    - 'src/flutter_dubov_system_native.h'
+  include-directives:
+    - 'src/flutter_dubov_system_native.h'
+ffi-native:
+comments:
+  style: any
+  length: full
