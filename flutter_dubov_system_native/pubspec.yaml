@@ -10,9 +10,24 @@ dependencies:
   hooks: ^1.0.0
   logging: ^1.3.0
   native_toolchain_c: ^0.17.4
+  flutter_dubov_system_platform_interface:
+  ffi: ^2.2.0
 
 dev_dependencies:
-  ffi: ^2.1.4
   ffigen: ^20.1.1
   flutter_lints: ^6.0.0
   test: ^1.28.0
+
+flutter:
+  plugin:
+    platforms:
+      windows:
+        dartPluginClass: DubovSystemNative
+      macos:
+        dartPluginClass: DubovSystemNative
+      linux:
+        dartPluginClass: DubovSystemNative
+      android:
+        dartPluginClass: DubovSystemNative
+      ios:
+        dartPluginClass: DubovSystemNative
