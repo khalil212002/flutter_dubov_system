@@ -1,0 +1,36 @@
+CPPDubovSystem
+Copyright 2024 Michael Shapiro
+
+This product includes software developed by Michael Shapiro
+(Link to the original repository, e.g., https://github.com/...).
+
+=========================================================================
+STATE OF CHANGES (Modifications made in accordance with Apache License 2.0)
+=========================================================================
+The following modifications were made to the original CPPDubovSystem source code
+by Khalil Warwar to ensure compatibility with standard cross-platform C++ 
+compilers (MSVC, Clang, GCC) for use within a Dart/Flutter FFI environment:
+
+1. Directory Structure Modifications:
+   - Renamed the directory `graph util` to `graph_util` to remove spaces, 
+     which caused path parsing errors in native build toolchains.
+   - Renamed the directory `trf util` to `trf_util` for the same reason.
+
+2. Header and Include Path Modifications:
+   - Updated `#include` directives across multiple `.cpp` and `.hpp` files 
+     (including `Tournament.hpp`) to reflect the newly renamed `graph_util` 
+     and `trf_util` directory paths.
+
+3. Standard Library Inclusions:
+   - Modified `Player.cpp`: Added `#include <cmath>` at the top of the file 
+     to resolve missing `std::round` definition errors on strict MSVC compilers.
+
+4. Removal of Non-Library Components:
+   - Removed original build system configurations (`CMakeLists.txt`, `build.sh`, 
+     `DubovSystem.xcodeproj`) and version history (`CHANGELOG.md`). The core 
+     logic inside the `DubovSystem/` directory was isolated so it could be 
+     compiled exclusively as a shared dynamic library (.dll/.so/.dylib) via 
+     Dart's native toolchain.
+
+These modifications do not alter the underlying chess pairing algorithms, 
+mathematical logic, or intended behavior of the original library.
