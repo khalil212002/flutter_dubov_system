@@ -9,7 +9,7 @@ headers:
   entry-points:
     - "src/flutter_dubov_system_native.h"
 ffi-native:
-  asset-id: "flutter_dubov_system_native"
+  asset-id: "package:flutter_dubov_system_native/flutter_dubov_system_native"
 comments:
   style: any
   length: full

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:native_toolchain_c/native_toolchain_c.dart';
 import 'package:logging/logging.dart';
 import 'package:hooks/hooks.dart';
@@ -16,12 +18,15 @@ void main(List<String> args) async {
         'src/CPPDubovSystem/DubovSystem/explain.cpp',
         'src/CPPDubovSystem/DubovSystem/baku.cpp',
         'src/CPPDubovSystem/DubovSystem/LinkedList.cpp',
-        'src/CPPDubovSystem/DubovSystem/graph util/Graph.cpp',
-        'src/CPPDubovSystem/DubovSystem/graph util/Matching.cpp',
-        'src/CPPDubovSystem/DubovSystem/graph util/BinaryHeap.cpp',
-        'src/CPPDubovSystem/DubovSystem/trf util/trf.cpp',
-        'src/CPPDubovSystem/DubovSystem/trf util/rtg.cpp',
+        'src/CPPDubovSystem/DubovSystem/graph_util/Graph.cpp',
+        'src/CPPDubovSystem/DubovSystem/graph_util/Matching.cpp',
+        'src/CPPDubovSystem/DubovSystem/graph_util/BinaryHeap.cpp',
+        'src/CPPDubovSystem/DubovSystem/trf_util/trf.cpp',
+        'src/CPPDubovSystem/DubovSystem/trf_util/rtg.cpp',
       ],
+      flags: Platform.isWindows
+          ? ['/std:c++20', '/permissive-', '/EHsc']
+          : ['-std=c++20'],
     );
     await cbuilder.run(
       input: input,
