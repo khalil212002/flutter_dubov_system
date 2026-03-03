@@ -44,6 +44,7 @@ void main(List<String> args) async {
       output: output,
       logger: Logger('')
         ..level = .ALL
+        // ignore: avoid_print
         ..onRecord.listen((record) => print(record.message)),
     );
   });
