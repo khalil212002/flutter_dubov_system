@@ -12,6 +12,7 @@ dependencies:
   native_toolchain_c: ^0.17.4
   flutter_dubov_system_platform_interface:
   ffi: ^2.2.0
+  native_assets_cli:
 
 dev_dependencies:
   ffigen: ^20.1.1

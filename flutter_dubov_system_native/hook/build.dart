@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:code_assets/code_assets.dart';
 import 'package:native_toolchain_c/native_toolchain_c.dart';
 import 'package:logging/logging.dart';
 import 'package:hooks/hooks.dart';
@@ -7,6 +6,9 @@ import 'package:hooks/hooks.dart';
 void main(List<String> args) async {
   await build(args, (input, output) async {
     final packageName = input.packageName;
+
+    final targetOS = input.config.code.targetOS;
+
     final cbuilder = CBuilder.library(
       name: packageName,
       assetName: packageName,
@@ -24,9 +26,18 @@ void main(List<String> args) async {
         'src/CPPDubovSystem/DubovSystem/trf_util/trf.cpp',
         'src/CPPDubovSystem/DubovSystem/trf_util/rtg.cpp',
       ],
-      flags: Platform.isWindows
-          ? ['/std:c++20', '/permissive-', '/EHsc']
-          : ['-std=c++20'],
+      flags: [
+        // 1. Windows uses MSVC (requires forward slashes)
+        if (targetOS == OS.windows) ...[
+          '/std:c++20',
+          '/permissive-',
+          '/EHsc',
+        ]
+        // 2. Apple, Linux, and Android use Clang/GCC (requires dashes)
+        else ...[
+          '-std=c++20',
+        ],
+      ],
     );
     await cbuilder.run(
       input: input,
