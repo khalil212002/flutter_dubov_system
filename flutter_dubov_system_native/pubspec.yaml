@@ -6,6 +6,7 @@ repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flu
 
 environment:
   sdk: ^3.11.0
+  flutter: ">=3.3.0"
 
 dependencies:
   code_assets: ^1.0.0
