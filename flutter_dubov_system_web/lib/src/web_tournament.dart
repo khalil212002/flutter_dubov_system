@@ -37,7 +37,9 @@ class WebTournament extends Tournament {
           m.is_bye.toDart,
         ),
       );
+      m.delete();
     }
+    pairings.delete();
     return matches;
   }
 
