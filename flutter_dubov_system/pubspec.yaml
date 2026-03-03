@@ -3,6 +3,7 @@ description: High-performance Flutter wrapper for the FIDE-approved CPPDubovSyst
 version: 0.0.1
 homepage: https://github.com/khalil212002/flutter_dubov_system
 repository: https://github.com/khalil212002/flutter_dubov_system/flutter_dubov_system
+publish_to: none
 
 environment:
   sdk: ^3.11.0
@@ -13,6 +14,8 @@ dependencies:
     sdk: flutter
   flutter_dubov_system_platform_interface: ^0.0.1
   flutter_dubov_system_web: ^0.0.1
+  flutter_dubov_system_native:
+    path: ../flutter_dubov_system_native
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -27,6 +30,16 @@ flutter:
     platforms:
       web:
         default_package: flutter_dubov_system_web
+      windows:
+        default_package: flutter_dubov_system_native
+      android:
+        default_package: flutter_dubov_system_native
+      linux:
+        default_package: flutter_dubov_system_native
+      ios:
+        default_package: flutter_dubov_system_native
+      macos:
+        default_package: flutter_dubov_system_native
 
   # To add assets to your package, add an assets section, like this:
   # assets:

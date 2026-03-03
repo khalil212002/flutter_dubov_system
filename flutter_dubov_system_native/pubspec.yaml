@@ -21,6 +21,7 @@ dev_dependencies:
 
 flutter:
   plugin:
+    implements: flutter_dubov_system
     platforms:
       windows:
         dartPluginClass: DubovSystemNative
