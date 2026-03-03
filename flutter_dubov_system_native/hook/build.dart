@@ -6,13 +6,13 @@ import 'package:hooks/hooks.dart';
 void main(List<String> args) async {
   await build(args, (input, output) async {
     final packageName = input.packageName;
-
     final targetOS = input.config.code.targetOS;
 
     final cbuilder = CBuilder.library(
       name: packageName,
       assetName: packageName,
       language: Language.cpp,
+      cppLinkStdLib: targetOS == OS.android ? 'c++_static' : null,
       sources: [
         'src/flutter_dubov_system_native.cpp',
         'src/CPPDubovSystem/DubovSystem/Player.cpp',
@@ -27,18 +27,22 @@ void main(List<String> args) async {
         'src/CPPDubovSystem/DubovSystem/trf_util/rtg.cpp',
       ],
       flags: [
-        // 1. Windows uses MSVC (requires forward slashes)
         if (targetOS == OS.windows) ...[
           '/std:c++20',
           '/permissive-',
           '/EHsc',
-        ]
-        // 2. Apple, Linux, and Android use Clang/GCC (requires dashes)
-        else ...[
+        ] else if (targetOS == OS.android) ...[
+          '-std=c++20',
+          '-fexceptions',
+          '-frtti',
+          '-lc++abi',
+          '-lunwind',
+        ] else ...[
           '-std=c++20',
         ],
       ],
     );
+
     await cbuilder.run(
       input: input,
       output: output,
