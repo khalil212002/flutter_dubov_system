@@ -3,14 +3,14 @@
 [![pub package](https://img.shields.io/pub/v/flutter_dubov_system.svg)](https://pub.dev/packages/flutter_dubov_system)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A high-performance cross-platform Flutter plugin providing a Dart wrapper for the **CPPDubovSystem** engine. This package allows developers to easily integrate **FIDE-approved Swiss system tournament pairing logic** into Flutter applications across Web, Desktop, and Mobile.
+A high-performance cross-platform Flutter plugin providing a Dart wrapper for the **CPPDubovSystem** engine. This package allows developers to easily integrate **FIDE-compliant Swiss system tournament pairing logic** into Flutter applications across Web, Desktop, and Mobile.
 
 > ⚠️ **Platform Support Notice:** > This package has currently only been tested on **Windows, Web, and Android**. While the federated architecture and Dart FFI are designed to support all platforms, you might need to make adjustments to the native package's `build.dart` hook to successfully compile the C++ engine on macOS, Linux, or iOS. Contributions and PRs for these platforms are welcome!
 
 ## Key Features
 
 - **Cross-Platform Support:** Seamlessly works on Android, Windows, and Web (via WebAssembly), with FFI foundations for iOS, macOS, and Linux.
-- **FIDE-Approved Engine:** Built on top of the robust CPPDubovSystem core, which is officially recognized by the International Chess Federation (FIDE) for official tournament matchmaking.
+- **FIDE-Compliant Engine:** Built on top of the robust CPPDubovSystem core, which strictly follows the International Chess Federation (FIDE) rules for Swiss Dubov tournament matchmaking.
 - **High Performance:** Utilizes compiled C++ bindings to ensure near-native calculation speeds and absolute precision, regardless of the platform.
 - **Complete Pairing Logic:** Fully supports chess player management, Elo rating tracking, color allocation (White/Black), and the automated generation of official Dubov Swiss pairings.
 
@@ -69,4 +69,4 @@ This package acts as a highly efficient bridge between the Flutter framework and
 
 - **Web Platform**: Utilizes dart:js_interop to invoke routines compiled into a dubov.wasm binary.
 
-This architecture ensures that the complex algorithmic logic remains identical to the FIDE-approved source code while executing rapidly across every Flutter target.
+This architecture ensures that the complex algorithmic logic remains identical to the FIDE-compliant source code while executing rapidly across every Flutter target.
