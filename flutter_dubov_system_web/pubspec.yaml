@@ -1,6 +1,6 @@
 name: flutter_dubov_system_web
 description: Web implementation of flutter_dubov_system. Utilizes the FIDE-approved CPPDubovSystem engine compiled to WASM for efficient chess pairings in Flutter web applications.
-version: 0.0.3
+version: 1.0.0
 homepage: https://github.com/khalil212002/flutter_dubov_system
 repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system_web
 
@@ -16,7 +16,7 @@ dependencies:
   web: ^1.0.0
   plugin_platform_interface: ^2.0.2
 
-  flutter_dubov_system_platform_interface: ^0.0.1
+  flutter_dubov_system_platform_interface: ^1.0.0
 
 dev_dependencies:
   flutter_test:
