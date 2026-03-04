@@ -100,15 +100,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.0"
   flutter_dubov_system_platform_interface:
     dependency: transitive
     description:
       name: flutter_dubov_system_platform_interface
-      sha256: fb94756b33ddd5d9c1535a4e49d5a3c8e9396993cef3dc3c32446f000332b35b
+      sha256: "78dee12b5744870eceb8297c27b14430bd7991ae11f2ed977fff05c99e81aa80"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "1.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
