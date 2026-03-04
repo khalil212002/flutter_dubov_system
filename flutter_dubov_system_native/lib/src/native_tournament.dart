@@ -23,22 +23,7 @@ class NativeTournament extends Tournament {
 
   @override
   List<MatchPairing> generatePairings(int r) {
-    final bindings.MatchArray matches = bindings.generatePairings(
-      _cppTournament,
-      r,
-    );
-    final List<MatchPairing> pairings = [];
-
-    for (int i = 0; i < matches.count; i++) {
-      final bindings.MatchHandle matchStruct = matches.ptr[i];
-
-      final NativePlayer whitePlayer = NativePlayer.fromCpp(matchStruct.white);
-      final NativePlayer blackPlayer = NativePlayer.fromCpp(matchStruct.black);
-
-      pairings.add(MatchPairing(whitePlayer, blackPlayer, matchStruct.is_bye));
-    }
-    bindings.freeMatchArray(matches);
-    return pairings;
+    return generatePairingsBaku(r, false);
   }
 
   @override
@@ -49,5 +34,57 @@ class NativeTournament extends Tournament {
   @override
   void setRound1Color(bool makeWhite) {
     return bindings.setRound1Color(_cppTournament, makeWhite);
+  }
+
+  @override
+  List<MatchPairing> generatePairingsBaku(int r, bool bakuAcceleration) {
+    final bindings.MatchArray matches = bindings.generatePairingsBaku(
+      _cppTournament,
+      r,
+      bakuAcceleration,
+    );
+
+    try {
+      final List<MatchPairing> pairings = [];
+      if (matches.count == 0 || matches.ptr.address == 0) return pairings;
+
+      for (int i = 0; i < matches.count; i++) {
+        final bindings.MatchHandle matchStruct = matches.ptr[i];
+        final NativePlayer whitePlayer = NativePlayer.fromCpp(
+          matchStruct.white,
+        );
+        final NativePlayer blackPlayer = NativePlayer.fromCpp(
+          matchStruct.black,
+        );
+
+        pairings.add(
+          MatchPairing(whitePlayer, blackPlayer, matchStruct.is_bye),
+        );
+      }
+      return pairings;
+    } finally {
+      bindings.freeMatchArray(matches);
+    }
+  }
+
+  @override
+  int get playerCount => bindings.getPlayerCount(_cppTournament);
+
+  @override
+  List<Player> get players {
+    final cppPlayers = bindings.getPlayers(_cppTournament);
+    try {
+      final List<Player> playerList = [];
+      if (cppPlayers.count == 0 || cppPlayers.ptr.address == 0) {
+        return playerList;
+      }
+      for (int i = 0; i < cppPlayers.count; i++) {
+        final cpp = cppPlayers.ptr[i];
+        playerList.add(NativePlayer.fromCpp(cpp));
+      }
+      return playerList;
+    } finally {
+      bindings.freePlayerArray(cppPlayers);
+    }
   }
 }

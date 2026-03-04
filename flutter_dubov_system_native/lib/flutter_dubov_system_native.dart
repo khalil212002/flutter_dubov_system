@@ -5,6 +5,8 @@ import 'package:flutter_dubov_system_native/src/native_tournament.dart';
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart'
     show MatchPairing;
+import 'package:flutter_dubov_system_native/flutter_dubov_system_native_bindings_generated.dart'
+    as bindings;
 
 class DubovSystemNative extends PlatformDubovSystem {
   DubovSystemNative() : super();
@@ -26,5 +28,10 @@ class DubovSystemNative extends PlatformDubovSystem {
   @override
   Future<void> initialize() async {
     return;
+  }
+
+  @override
+  int getMaxUpfloatTimes(int totalRounds) {
+    return bindings.getMaxUpfloatTimes(totalRounds);
   }
 }

@@ -123,9 +123,12 @@ class NativePlayer extends Player {
   @override
   String get name {
     final nameRef = bindings.getName(_cppPlayer);
-    final nameCopy = nameRef.cast<Utf8>().toDartString();
-    bindings.freeString(nameRef);
-    return nameCopy;
+    try {
+      if (nameRef.address == 0) return "";
+      return nameRef.cast<Utf8>().toDartString();
+    } finally {
+      bindings.freeString(nameRef);
+    }
   }
 
   @override
@@ -168,4 +171,25 @@ class NativePlayer extends Player {
 
   @override
   bool get upfloatedPreviously => bindings.upfloatedPreviously(_cppPlayer);
+
+  @override
+  int get numColors => bindings.getNumColors(_cppPlayer);
+
+  @override
+  int get numUpfloat => bindings.getNumUpfloat(_cppPlayer);
+
+  @override
+  List<int> get oppPlayed {
+    final ids = bindings.getOppPlayed(_cppPlayer);
+    try {
+      if (ids.count == 0 || ids.ptr.address == 0) return [];
+      List<int> opps = [];
+      for (int i = 0; i < ids.count; i++) {
+        opps.add(ids.ptr[i]);
+      }
+      return opps;
+    } finally {
+      bindings.freeIntArray(ids);
+    }
+  }
 }
