@@ -1,6 +1,5 @@
 import 'package:flutter_dubov_system_native/flutter_dubov_system_native.dart';
 import 'package:test/test.dart';
-import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 
 void main() {
   late DubovSystemNative dubovSystem;

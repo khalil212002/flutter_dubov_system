@@ -43,7 +43,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
 
   // Temporary handles for the active C++ objects
   Tournament? _cppTournament;
-  List<Player> _cppPlayers = [];
+  final List<Player> _cppPlayers = [];
 
   @override
   void initState() {
@@ -67,7 +67,6 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
 
     _cppTournament?.dispose();
     _cppTournament = null;
-    print("C++ Memory Cleared.");
   }
 
   Future<void> _initSystem() async {
