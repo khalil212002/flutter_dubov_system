@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter_dubov_system_native/src/native_player.dart';
 import 'package:flutter_dubov_system_native/src/native_tournament.dart';
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
-export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart'
-    show MatchPairing;
+export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 import 'package:flutter_dubov_system_native/flutter_dubov_system_native_bindings_generated.dart'
     as bindings;
 
