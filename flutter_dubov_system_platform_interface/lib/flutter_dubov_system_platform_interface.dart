@@ -31,6 +31,10 @@ abstract class PlatformDubovSystem extends PlatformInterface {
   /// Creates a platform-specific [Player] with the given [name], [rating], [id], and [points].
   Player createPlayer(String name, int rating, int id, double points);
 
+  /// The static "entry point" that users will call.
+  /// It redirects to the platform-specific instance method.
+  int getMaxUpfloatTimes(int totalRounds);
+
   /// Creates a platform-specific [Tournament] with the given number of [totalRounds].
   Tournament createTournament(int totalRounds);
 }
@@ -52,6 +56,11 @@ class DefaultDubovSystem extends PlatformDubovSystem {
 
   @override
   Tournament createTournament(int totalRounds) {
+    throw UnimplementedError();
+  }
+
+  @override
+  int getMaxUpfloatTimes(int totalRounds) {
     throw UnimplementedError();
   }
 }

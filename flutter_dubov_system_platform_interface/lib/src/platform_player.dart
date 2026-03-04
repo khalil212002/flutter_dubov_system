@@ -21,6 +21,15 @@ abstract class Player {
   /// The current tournament points of the player.
   double get points;
 
+  /// The total number of colors (games) played.
+  int get numColors;
+
+  /// The total number of times this player has been upfloated.
+  int get numUpfloat;
+
+  /// A list of IDs representing opponents this player has already played.
+  List<int> get oppPlayed;
+
   /// The color the player is due to play in the next round.
   Color get dueColor;
 
@@ -73,7 +82,8 @@ abstract class Player {
   /// Returns true if this player can be floated up in the given score group [cr].
   bool canUpfloat(int cr);
 
-  /// Returns the number of times this player has been upfloated if they are the maximum upfloater for the [totalRounds].
+  /// Returns the number of times this player has been upfloated if they are the
+  /// maximum upfloater for the [totalRounds].
   int getNumUpfloatedIfMaxUpfloater(int totalRounds);
 
   /// Returns true if this player should alternate colors against [opp].
