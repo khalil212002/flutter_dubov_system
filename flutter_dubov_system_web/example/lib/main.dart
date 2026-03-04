@@ -5,6 +5,21 @@ void main() {
   runApp(const DubovExampleApp());
 }
 
+/// A pure Dart class to hold the player's state between rounds,
+/// simulating data you might save to a local database like SQLite or Hive.
+class PlayerData {
+  final int id;
+  final String name;
+  final int rating;
+  double points = 0.0;
+  List<int> opponentsPlayed = [];
+  List<int> opponentRatings = [];
+  List<Color> colorsPlayed = [];
+  bool hasReceivedBye = false;
+
+  PlayerData({required this.id, required this.name, required this.rating});
+}
+
 class DubovExampleApp extends StatefulWidget {
   const DubovExampleApp({super.key});
 
@@ -13,59 +28,156 @@ class DubovExampleApp extends StatefulWidget {
 }
 
 class _DubovExampleAppState extends State<DubovExampleApp> {
-  // Instance of the web implementation
   final DubovSystemWeb _ds = DubovSystemWeb();
+
   bool _isInitialized = false;
-  List<MatchPairing> _round1Pairings = [];
   String _errorMessage = '';
+  int _currentRound = 0;
+  List<MatchPairing> _currentPairings = [];
+
+  // This is our "Database".
+  final List<PlayerData> _database = [
+    PlayerData(id: 1, name: 'Khalil', rating: 2850),
+    PlayerData(id: 2, name: 'Amir', rating: 2790),
+    PlayerData(id: 3, name: 'Ali', rating: 2780),
+    PlayerData(id: 4, name: 'Ian', rating: 2770),
+  ];
+
+  // Temporary handles for the active C++ objects
+  Tournament? _cppTournament;
+  List<Player> _cppPlayers = [];
 
   @override
   void initState() {
     super.initState();
-    _setupAndRunTournament();
+    _initSystem();
   }
 
-  Future<void> _setupAndRunTournament() async {
+  @override
+  void dispose() {
+    _destroyCppObjects();
+    super.dispose();
+  }
+
+  /// Deletes the C++ objects to free memory.
+  /// The data survives because it's safely stored in `_database`.
+  void _destroyCppObjects() {
+    for (final player in _cppPlayers) {
+      player.dispose();
+    }
+    _cppPlayers.clear();
+
+    _cppTournament?.dispose();
+    _cppTournament = null;
+    print("C++ Memory Cleared.");
+  }
+
+  Future<void> _initSystem() async {
     try {
-      // Step 1: Initialize the Dubov System (Loads WASM and JS files)
       await _ds.initialize();
       setState(() {
         _isInitialized = true;
       });
+    } catch (e) {
+      setState(() {
+        _errorMessage = "Initialization Failed: ${e.toString()}";
+      });
+    }
+  }
 
-      // Step 2: Create a Tournament (e.g., 3 total rounds)
-      final tournament = _ds.createTournament(3);
+  /// This function takes our Dart `PlayerData` and manually reconstructs
+  /// the C++ `Player` object, feeding it all the historical data.
+  Player _recreateCppPlayer(PlayerData data) {
+    // 1. Create the base player
+    final p = _ds.createPlayer(data.name, data.rating, data.id, 0.0);
 
-      // Step 3: Create Players (Name, Rating, ID, Initial Points)
-      final p1 = _ds.createPlayer('Khalil', 2850, 1, 0.0);
-      final p2 = _ds.createPlayer('Amir', 2790, 2, 0.0);
-      final p3 = _ds.createPlayer('Ali', 2780, 3, 0.0);
-      final p4 = _ds.createPlayer('Ian', 2770, 4, 0.0);
+    // 2. Add historical points
+    p.addPoints(data.points);
 
-      // Step 4: Add Players to the Tournament
-      tournament.addPlayer(p1);
-      tournament.addPlayer(p2);
-      tournament.addPlayer(p3);
-      tournament.addPlayer(p4);
+    // 3. Add opponent history
+    for (int i = 0; i < data.opponentsPlayed.length; i++) {
+      p.addOpp(data.opponentsPlayed[i]);
+      p.addOppRating(data.opponentRatings[i]);
+    }
 
-      // Step 5: Generate Pairings for Round 1
-      // Setting round 1 color logic (true = top seed gets White, etc.)
-      tournament.setRound1Color(true);
+    // 4. Add color history
+    for (final color in data.colorsPlayed) {
+      p.addColor(color);
+    }
 
-      final pairings = tournament.generatePairings(1);
+    // 5. Restore bye status
+    p.setByeStatus(data.hasReceivedBye);
 
-      if (tournament.pairingErrorOccured()) {
-        throw Exception("A pairing error occurred during generation.");
+    return p;
+  }
+
+  /// Simulates match results to update our Dart database, then deletes the C++ objects.
+  void _simulateResultsAndClearMemory() {
+    // Simulate that White wins every game just for this example
+    for (final match in _currentPairings) {
+      if (match.isBye) {
+        final p = _database.firstWhere((p) => p.id == match.white.id);
+        p.points += 1.0;
+        p.hasReceivedBye = true;
+      } else {
+        final whitePlayer = _database.firstWhere((p) => p.id == match.white.id);
+        final blackPlayer = _database.firstWhere((p) => p.id == match.black.id);
+
+        // Update Points (White wins: 1 point to White, 0 to Black)
+        whitePlayer.points += 1.0;
+
+        // Record Opponents
+        whitePlayer.opponentsPlayed.add(blackPlayer.id);
+        whitePlayer.opponentRatings.add(blackPlayer.rating);
+        blackPlayer.opponentsPlayed.add(whitePlayer.id);
+        blackPlayer.opponentRatings.add(whitePlayer.rating);
+
+        // Record Colors
+        whitePlayer.colorsPlayed.add(Color.white);
+        blackPlayer.colorsPlayed.add(Color.black);
+      }
+    }
+
+    // Now that our Dart database is updated, we don't need the C++ objects anymore!
+    _destroyCppObjects();
+  }
+
+  void _generateNextRound() {
+    try {
+      // 1. If we are moving from Round 1 -> Round 2, save results and clear old memory
+      if (_currentRound > 0) {
+        _simulateResultsAndClearMemory();
       }
 
-      // Update UI with the results
-      setState(() {
-        _round1Pairings = pairings;
-      });
+      _currentRound++;
 
-      // NOTE: In a real application, you should keep the player and tournament
-      // objects alive across rounds to update their points and colors.
-      // You should only call dispose() when the entire tournament is completely over.
+      // 2. Create a fresh C++ Tournament
+      _cppTournament = _ds.createTournament(3);
+
+      // 3. Recreate the C++ players from our Dart database
+      for (final data in _database) {
+        final restoredCppPlayer = _recreateCppPlayer(data);
+        _cppPlayers.add(restoredCppPlayer);
+        _cppTournament!.addPlayer(restoredCppPlayer);
+      }
+
+      // 4. Generate the pairings for the new round
+      if (_currentRound == 1) {
+        _cppTournament!.setRound1Color(true);
+      }
+
+      final pairings = _cppTournament!.generatePairings(_currentRound);
+
+      if (_cppTournament!.pairingErrorOccured()) {
+        throw Exception(
+          "A pairing error occurred during Round $_currentRound generation.",
+        );
+      }
+
+      setState(() {
+        _currentPairings = pairings;
+        _errorMessage = '';
+      });
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
@@ -82,7 +194,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Dubov System Example'),
+          title: const Text('Stateless Dubov Example'),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
         body: Center(
@@ -92,64 +204,60 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
                   style: const TextStyle(color: Colors.red),
                 )
               : !_isInitialized
-              ? const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('Initializing WebAssembly Module...'),
-                  ],
-                )
+              ? const CircularProgressIndicator()
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Round 1 Pairings',
-                      style: TextStyle(
+                    Text(
+                      _currentRound == 0
+                          ? 'Tournament Ready'
+                          : 'Round $_currentRound Pairings',
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if (_round1Pairings.isEmpty)
-                      const Text('No pairings generated.')
-                    else
+
+                    if (_currentPairings.isNotEmpty)
                       Expanded(
                         child: ListView.builder(
-                          itemCount: _round1Pairings.length,
+                          itemCount: _currentPairings.length,
                           itemBuilder: (context, index) {
-                            final match = _round1Pairings[index];
+                            final match = _currentPairings[index];
                             return Card(
                               margin: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
                                 vertical: 8.0,
                               ),
                               child: ListTile(
-                                leading: CircleAvatar(
-                                  child: Text(
-                                    'Board\n${index + 1}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
-                                ),
                                 title: Text(
                                   match.isBye
                                       ? '${match.white.name} - BYE'
                                       : '⚪ ${match.white.name}  vs  ⚫ ${match.black.name}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
                                 ),
-                                subtitle: match.isBye
-                                    ? const Text('Player receives a bye')
-                                    : Text(
-                                        'Ratings: ${match.white.rating} vs ${match.black.rating}',
-                                      ),
+                                subtitle: Text(
+                                  'Points: ${match.white.points} vs ${match.black.points}',
+                                ),
                               ),
                             );
                           },
                         ),
                       ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
+                        onPressed: _currentRound < 3
+                            ? _generateNextRound
+                            : null,
+                        child: Text(
+                          _currentRound == 0
+                              ? 'Start Round 1'
+                              : 'Simulate Results & Generate Round ${_currentRound + 1}',
+                        ),
+                      ),
+                    ),
                   ],
                 ),
         ),
