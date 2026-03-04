@@ -121,7 +121,12 @@ class NativePlayer extends Player {
   }
 
   @override
-  String get name => bindings.getName(_cppPlayer).cast<Utf8>().toDartString();
+  String get name {
+    final nameRef = bindings.getName(_cppPlayer);
+    final nameCopy = nameRef.cast<Utf8>().toDartString();
+    bindings.freeString(nameRef);
+    return nameCopy;
+  }
 
   @override
   int get oppCount => bindings.getOppCount(_cppPlayer);

@@ -18,6 +18,9 @@ external void freePlayerArray(PlayerArray array);
 @ffi.Native<ffi.Void Function(MatchArray)>()
 external void freeMatchArray(MatchArray array);
 
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Char>)>()
+external void freeString(ffi.Pointer<ffi.Char> str);
+
 /// Player related functions
 @ffi.Native<
   PlayerHandle Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Int, ffi.Double)

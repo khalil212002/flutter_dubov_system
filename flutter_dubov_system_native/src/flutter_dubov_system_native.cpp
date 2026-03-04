@@ -23,6 +23,12 @@ extern "C" {
         if (array.ptr != nullptr) free(array.ptr);
     }
 
+    FFI_PLUGIN_EXPORT void freeString(char* str) {
+    if (str != nullptr) {
+        free(str);
+    }
+}
+
     FFI_PLUGIN_EXPORT PlayerHandle create_player(const char* name, int rating, int id, double points) {
         return new Player(name, rating, id, points);
     }

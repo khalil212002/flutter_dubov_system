@@ -50,6 +50,7 @@ extern "C" {
     FFI_PLUGIN_EXPORT void freeIntArray(IntArray array);
     FFI_PLUGIN_EXPORT void freePlayerArray(PlayerArray array);
     FFI_PLUGIN_EXPORT void freeMatchArray(MatchArray array);
+    FFI_PLUGIN_EXPORT void freeString(char* str);
 
     // Player related functions
     FFI_PLUGIN_EXPORT PlayerHandle create_player(const char* name, int rating, int id, double points); 
