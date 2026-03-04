@@ -3,7 +3,6 @@ import 'dart:js_interop_unsafe';
 import 'package:flutter_dubov_system_web/flutter_dubov_system_web.dart';
 import 'package:flutter_dubov_system_web/src/dubov_system_interop.dart';
 import 'package:flutter_dubov_system_web/src/web_player.dart';
-import 'web_match.dart';
 
 class WebTournament extends Tournament {
   final DubovModule _module;
@@ -24,14 +23,14 @@ class WebTournament extends Tournament {
   }
 
   @override
-  List<WebMatchPairing> generatePairings(int r) {
+  List<MatchPairing> generatePairings(int r) {
     final pairings = _wasmTournament.generatePairings(r.toJS);
     final count = pairings.size().toDartInt;
-    final List<WebMatchPairing> matches = [];
+    final List<MatchPairing> matches = [];
     for (var i in List.generate(count, (i) => i)) {
       final m = pairings.get(i.toJS);
       matches.add(
-        WebMatchPairing(
+        MatchPairing(
           WebPlayer.fromJs(_module, m.white),
           WebPlayer.fromJs(_module, m.black),
           m.is_bye.toDart,
