@@ -76,4 +76,9 @@ class DubovSystemWeb extends PlatformDubovSystem {
     }
     return WebTournament(_module!, totalRounds);
   }
+
+  @override
+  int getMaxUpfloatTimes(int totalRounds) {
+    return _module!.Player.getMaxUpfloatTimes(totalRounds.toJS).toDartInt;
+  }
 }

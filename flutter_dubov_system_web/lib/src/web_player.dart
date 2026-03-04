@@ -160,4 +160,27 @@ class WebPlayer extends Player {
 
   @override
   bool get upfloatedPreviously => _wasmPlayer.upfloatedPreviously().toDart;
+
+  @override
+  int get numColors => _wasmPlayer.getNumColors().toDartInt;
+
+  @override
+  int get numUpfloat => _wasmPlayer.getNumUpfloat().toDartInt;
+
+  @override
+  List<int> get oppPlayed {
+    final jsVector = _wasmPlayer.getOppPlayed();
+    try {
+      final count = jsVector.size().toDartInt;
+      final List<int> opps = [];
+
+      for (int i = 0; i < count; i++) {
+        opps.add(jsVector.get(i.toJS).toDartInt);
+      }
+
+      return opps;
+    } finally {
+      jsVector.delete();
+    }
+  }
 }

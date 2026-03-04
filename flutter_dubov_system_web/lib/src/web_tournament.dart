@@ -24,22 +24,7 @@ class WebTournament extends Tournament {
 
   @override
   List<MatchPairing> generatePairings(int r) {
-    final pairings = _wasmTournament.generatePairings(r.toJS);
-    final count = pairings.size().toDartInt;
-    final List<MatchPairing> matches = [];
-    for (var i in List.generate(count, (i) => i)) {
-      final m = pairings.get(i.toJS);
-      matches.add(
-        MatchPairing(
-          WebPlayer.fromJs(_module, m.white),
-          WebPlayer.fromJs(_module, m.black),
-          m.is_bye.toDart,
-        ),
-      );
-      m.delete();
-    }
-    pairings.delete();
-    return matches;
+    return generatePairingsBaku(r, false);
   }
 
   @override
@@ -50,5 +35,56 @@ class WebTournament extends Tournament {
   @override
   void setRound1Color(bool makeWhite) {
     _wasmTournament.setRound1Color(makeWhite.toJS);
+  }
+
+  @override
+  List<MatchPairing> generatePairingsBaku(int r, bool bakuAcceleration) {
+    final pairings = _wasmTournament.generatePairingsBaku(
+      r.toJS,
+      bakuAcceleration.toJS,
+    );
+
+    try {
+      final count = pairings.size().toDartInt;
+      final List<MatchPairing> matches = [];
+
+      for (int i = 0; i < count; i++) {
+        final m = pairings.get(i.toJS);
+        try {
+          matches.add(
+            MatchPairing(
+              WebPlayer.fromJs(_module, m.white),
+              WebPlayer.fromJs(_module, m.black),
+              m.is_bye.toDart,
+            ),
+          );
+        } finally {
+          m.delete();
+        }
+      }
+      return matches;
+    } finally {
+      pairings.delete();
+    }
+  }
+
+  @override
+  int get playerCount => _wasmTournament.getPlayerCount().toDartInt;
+
+  @override
+  List<Player> get players {
+    final jsPlayers = _wasmTournament.getPlayers();
+    try {
+      final count = jsPlayers.size().toDartInt;
+      final List<Player> playerList = [];
+
+      for (int i = 0; i < count; i++) {
+        final p = jsPlayers.get(i.toJS);
+        playerList.add(WebPlayer.fromJs(_module, p));
+      }
+      return playerList;
+    } finally {
+      jsPlayers.delete();
+    }
   }
 }
