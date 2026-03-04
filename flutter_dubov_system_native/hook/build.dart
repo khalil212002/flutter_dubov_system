@@ -6,7 +6,17 @@ import 'package:hooks/hooks.dart';
 void main(List<String> args) async {
   await build(args, (input, output) async {
     final packageName = input.packageName;
-    final targetOS = input.config.code.targetOS;
+
+    // 1. GUARD: Safely attempt to access the code configuration.
+    // On Web builds, this throws a null check exception because native C
+    // compilation is not supported. We catch it and exit gracefully.
+    OS targetOS;
+    try {
+      targetOS = input.config.code.targetOS;
+    } catch (e) {
+      // We are compiling for the Web. Return gracefully!
+      return;
+    }
 
     final cbuilder = CBuilder.library(
       name: packageName,

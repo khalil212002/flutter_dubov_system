@@ -1,9 +1,9 @@
-# Flutter Dubov System (FIDE-Approved Matchmaking)
+# Flutter Dubov System (FIDE-Compliant Matchmaking)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![pub package](https://img.shields.io/pub/v/flutter_dubov_system.svg)](https://pub.dev/packages/flutter_dubov_system)
 
-A federated Flutter plugin that brings the **FIDE-approved [CPPDubovSystem](https://github.com/MichaelVShapiro/CPPDubovSystem/tree/main) engine** to the Dart ecosystem. This repository gives you the tools to generate official, completely accurate **Swiss system chess tournament pairings** right inside your Flutter apps.
+A federated Flutter plugin that brings the **FIDE-compliant [CPPDubovSystem](https://github.com/MichaelVShapiro/CPPDubovSystem/tree/main) engine** to the Dart ecosystem. This repository gives you the tools to generate strict, FIDE-compliant **Swiss system chess tournament pairings** right inside your Flutter apps.
 
 Currently, this plugin specifically targets **Flutter Web** by running the underlying C++ engine via **WebAssembly (WASM)**.
 
@@ -11,12 +11,12 @@ Currently, this plugin specifically targets **Flutter Web** by running the under
 
 This project uses Flutter's **federated plugin architecture** to keep things organized and easy to maintain. The repository is divided into four main packages:
 
-| Package                                                                                       | Description                                                                                                        | Pub.dev                                                                                                                                                      |
-| :-------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📦 **[`flutter_dubov_system`](./flutter_dubov_system)** | **The Main Package.** If you're an app developer, this is the one you want to add to your project.                 | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system.svg)](https://pub.dev/packages/flutter_dubov_system)                                       |
-| 🔌 **[`flutter_dubov_system_platform_interface`](./flutter_dubov_system_platform_interface)** | The common platform interface. It defines the base classes and data models (`Player`, `Tournament`).               | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_platform_interface.svg)](https://pub.dev/packages/flutter_dubov_system_platform_interface) |
-| 🖥️ **[`flutter_dubov_system_native`](./flutter_dubov_system_native)** | The native implementation. It uses `dart:ffi` to directly bind to the compiled C++ engine for Desktop and Mobile.  | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_native.svg)](https://pub.dev/packages/flutter_dubov_system_native)                         |
-| 🌐 **[`flutter_dubov_system_web`](./flutter_dubov_system_web)** | The web implementation. It uses `dart:js_interop` to talk to the compiled C++ engine (`dubov.wasm`).               | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_web.svg)](https://pub.dev/packages/flutter_dubov_system_web)                               |
+| Package                                                                                       | Description                                                                                                       | Pub.dev                                                                                                                                                      |
+| :-------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 📦 **[`flutter_dubov_system`](./flutter_dubov_system)**                                       | **The Main Package.** If you're an app developer, this is the one you want to add to your project.                | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system.svg)](https://pub.dev/packages/flutter_dubov_system)                                       |
+| 🔌 **[`flutter_dubov_system_platform_interface`](./flutter_dubov_system_platform_interface)** | The common platform interface. It defines the base classes and data models (`Player`, `Tournament`).              | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_platform_interface.svg)](https://pub.dev/packages/flutter_dubov_system_platform_interface) |
+| 🖥️ **[`flutter_dubov_system_native`](./flutter_dubov_system_native)**                         | The native implementation. It uses `dart:ffi` to directly bind to the compiled C++ engine for Desktop and Mobile. | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_native.svg)](https://pub.dev/packages/flutter_dubov_system_native)                         |
+| 🌐 **[`flutter_dubov_system_web`](./flutter_dubov_system_web)**                               | The web implementation. It uses `dart:js_interop` to talk to the compiled C++ engine (`dubov.wasm`).              | [![pub package](https://img.shields.io/pub/v/flutter_dubov_system_web.svg)](https://pub.dev/packages/flutter_dubov_system_web)                               |
 
 ## 🚀 Quick Start for App Developers
 
@@ -47,7 +47,7 @@ void main() async {
   tournament.addPlayer(p1);
   tournament.addPlayer(p2);
 
-  // 4. Generate official FIDE pairings
+  // 4. Generate FIDE-compliant pairings
   final pairings = tournament.generatePairings(1);
 
   // 5. Clean up C++ memory manually

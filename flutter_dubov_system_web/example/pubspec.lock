@@ -78,10 +78,9 @@ packages:
   flutter_dubov_system_platform_interface:
     dependency: transitive
     description:
-      name: flutter_dubov_system_platform_interface
-      sha256: fb94756b33ddd5d9c1535a4e49d5a3c8e9396993cef3dc3c32446f000332b35b
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../flutter_dubov_system_platform_interface"
+      relative: true
+    source: path
     version: "0.0.1"
   flutter_dubov_system_web:
     dependency: "direct main"
@@ -89,7 +88,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:

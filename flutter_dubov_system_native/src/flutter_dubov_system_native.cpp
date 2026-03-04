@@ -50,6 +50,14 @@ extern "C" {
 #endif
     }
 
+    FFI_PLUGIN_EXPORT int getNumColors(PlayerHandle player) {
+        return static_cast<Player*>(player)->getNumColors();
+    }
+
+    FFI_PLUGIN_EXPORT int getNumUpfloat(PlayerHandle player) {
+        return static_cast<Player*>(player)->getNumUpfloat();
+    }
+
     FFI_PLUGIN_EXPORT void addColor(PlayerHandle player, ColorHandle c) {
         Color color;
         switch (c) {

@@ -1,7 +1,13 @@
-## 0.0.2
+## 1.0.0
 
-- **Initial Release** of the Flutter Dubov System plugin.
-- Integrated the FIDE-approved **CPPDubovSystem** C++ engine for official Swiss tournament matchmaking.
-- Added **Web Support** utilizing WebAssembly (WASM) via `dart:js_interop`.
-- Added **Native Support** (Windows, macOS, Linux, Android, iOS) leveraging Dart FFI for near-native C++ performance.
-- Implemented complete player management, Elo rating tracking, and official color allocation rules.
+### Added
+
+- Exposed missing player evaluation and history methods from the native C++ engine to the Dart platform interface.
+- Added getters for opponent history metrics: `ARO` (Average Rating of Opponents) and `oppCount`.
+- Added methods to evaluate floating rules: `canUpfloat`, `getNumUpfloatedIfMaxUpfloater`, and `upfloatedPreviously`.
+- Added color history evaluation tools: `firstColorPlayed`, `isColorHistEqual`, and `shouldAlternate`.
+- Added match eligibility checks: `canPlayOpp` and `hasReceivedBye`.
+
+### Changed
+
+- Updated documentation in README files to clarify that the engine is "FIDE-compliant" rather than "FIDE-approved", accurately reflecting the current certification status of the underlying `CPPDubovSystem` engine.

@@ -19,6 +19,16 @@ abstract class Tournament {
   /// Generates and returns a list of [MatchPairing] for round [r].
   List<MatchPairing> generatePairings(int r);
 
+  /// Returns a list of all [Player]s currently in the tournament.
+  List<Player> get players;
+
+  /// Returns the total number of players in the tournament.
+  int get playerCount;
+
+  /// Generates and returns a list of [MatchPairing] for round [r]
+  /// using the Baku acceleration method if [bakuAcceleration] is true.
+  List<MatchPairing> generatePairingsBaku(int r, bool bakuAcceleration);
+
   /// Cleans up resources associated with this tournament.
   void dispose();
 }

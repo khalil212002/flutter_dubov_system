@@ -19,6 +19,10 @@ std::vector<CPPDubovSystem::Match> wrap_generatePairingsBaku(CPPDubovSystem::Tou
 }
 
 EMSCRIPTEN_BINDINGS(dubov_system) {
+    register_vector<int>("VectorInt");
+    register_vector<CPPDubovSystem::Player>("VectorPlayer");
+    register_vector<CPPDubovSystem::Match>("VectorMatch");
+
     enum_<CPPDubovSystem::Color>("Color")
         .value("WHITE", CPPDubovSystem::Color::WHITE)
         .value("BLACK", CPPDubovSystem::Color::BLACK)
@@ -36,11 +40,14 @@ EMSCRIPTEN_BINDINGS(dubov_system) {
         .function("getName", &CPPDubovSystem::Player::getName)
         .function("getRating", &CPPDubovSystem::Player::getRating)
         .function("getID", &CPPDubovSystem::Player::getID)
+        .function("getNumColors", &CPPDubovSystem::Player::getNumColors)
+        .function("getNumUpfloat", &CPPDubovSystem::Player::getNumUpfloat)
         .function("getPoints", &CPPDubovSystem::Player::getPoints)
         .function("getDueColor", &CPPDubovSystem::Player::getDueColor)
         .function("getPreferenceStrength", &CPPDubovSystem::Player::getPreferenceStrength)
         .function("getARO", &CPPDubovSystem::Player::getARO)
         .function("getOppCount", &CPPDubovSystem::Player::getOppCount)
+        .function("getOppPlayed", &CPPDubovSystem::Player::getOppPlayed)
         .function("hasReceievedBye", &CPPDubovSystem::Player::hasReceievedBye)
         .function("upfloatedPreviously", &CPPDubovSystem::Player::upfloatedPreviously)
         .function("getFirstColorPlayed", &CPPDubovSystem::Player::getFirstColorPlayed)
@@ -64,12 +71,12 @@ EMSCRIPTEN_BINDINGS(dubov_system) {
         .property("black", &CPPDubovSystem::Match::black)
         .property("is_bye", &CPPDubovSystem::Match::is_bye);
 
-    register_vector<CPPDubovSystem::Match>("VectorMatch");
-
     class_<CPPDubovSystem::Tournament>("Tournament")
         .constructor<int>()
         .function("addPlayer", &wrap_addPlayer)
         .function("setRound1Color", &CPPDubovSystem::Tournament::setRound1Color)
+        .function("getPlayers", &CPPDubovSystem::Tournament::getPlayers)
+        .function("getPlayerCount", &CPPDubovSystem::Tournament::getPlayerCount)
         .function("generatePairings", &wrap_generatePairings)
         .function("generatePairingsBaku", &wrap_generatePairingsBaku)
         .function("pairingErrorOccured", &CPPDubovSystem::Tournament::pairingErrorOccured);

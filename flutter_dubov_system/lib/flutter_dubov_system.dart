@@ -1,6 +1,6 @@
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart'
-    show MatchPairing;
+    show MatchPairing, Color, ColorPreference, Tournament, Player;
 
 /// The main entry point for the Dubov System plugin.
 ///

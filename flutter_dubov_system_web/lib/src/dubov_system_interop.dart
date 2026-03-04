@@ -9,8 +9,13 @@ extension type DubovModuleConfig._(JSObject _) implements JSObject {
 }
 
 @JS()
+extension type PlayerClass._(JSFunction _) implements JSFunction {
+  external JSNumber getMaxUpfloatTimes(JSNumber totalRounds);
+}
+
+@JS()
 extension type DubovModule._(JSObject _) implements JSObject {
-  external JSFunction get Player;
+  external PlayerClass get Player;
   external JSFunction get Tournament;
 
   external ColorEnumObject get Color;
@@ -38,10 +43,34 @@ extension type ColorPreferenceEnumObject._(JSObject _) implements JSObject {
 }
 
 @JS()
+extension type VectorInt._(JSObject _) implements JSObject {
+  external JSNumber size();
+  external JSNumber get(JSNumber index);
+  external void delete();
+}
+
+@JS()
+extension type VectorPlayer._(JSObject _) implements JSObject {
+  external JSNumber size();
+  external JSPlayer get(JSNumber index);
+  external void delete();
+}
+
+@JS()
+extension type VectorMatch._(JSObject _) implements JSObject {
+  external JSNumber size();
+  external Match get(JSNumber index);
+  external void delete();
+}
+
+@JS()
 extension type JSPlayer._(JSObject _) implements JSObject {
   external JSString getName();
   external JSNumber getRating();
   external JSNumber getID();
+  external JSNumber getNumColors();
+  external JSNumber getNumUpfloat();
+  external VectorInt getOppPlayed();
   external JSNumber getPoints();
   external EmbindEnum getDueColor();
   external EmbindEnum getPreferenceStrength();
@@ -78,16 +107,11 @@ extension type Match._(JSObject _) implements JSObject {
 }
 
 @JS()
-extension type VectorMatch._(JSObject _) implements JSObject {
-  external JSNumber size();
-  external Match get(JSNumber index);
-  external void delete();
-}
-
-@JS()
 extension type JSTournament._(JSObject _) implements JSObject {
   external void addPlayer(JSPlayer p);
   external void setRound1Color(JSBoolean makeWhite);
+  external VectorPlayer getPlayers();
+  external JSNumber getPlayerCount();
   external VectorMatch generatePairings(JSNumber round);
   external VectorMatch generatePairingsBaku(JSNumber round, JSBoolean baku);
   external JSBoolean pairingErrorOccured();
