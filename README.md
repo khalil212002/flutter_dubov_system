@@ -26,7 +26,7 @@ To use this plugin in your Flutter app, you only need to interact with the main 
 
 ```yaml
 dependencies:
-  flutter_dubov_system: ^0.0.1
+  flutter_dubov_system: ^1.0.2
 ```
 
 **2. Initialize and Generate Pairings:**

@@ -1,3 +1,17 @@
+## 1.0.2
+
+### Fixed
+
+- Resolved significant memory leaks in both Native (FFI) and Web (WASM) implementations.
+- Improved object identity: `Tournament.players` and `MatchPairing` now return stable, identical Dart object instances, preventing redundant allocations and state synchronization issues.
+- Fixed a spelling error in the platform interface (`platfrom` -> `platform`).
+
+## 1.0.1
+
+### Fixed
+
+- Improved internal memory handling for better stability across all platforms.
+
 ## 1.0.0
 
 ### Added
@@ -10,4 +24,4 @@
 
 ### Changed
 
-- Updated documentation in README files to clarify that the engine is "FIDE-compliant" rather than "FIDE-approved", accurately reflecting the current certification status of the underlying `CPPDubovSystem` engine.
+- Updated documentation in README files to clarify that the engine is "FIDE-compliant" rather than "FIDE-approved", accurately reflecting the current status of the underlying `CPPDubovSystem` engine.
