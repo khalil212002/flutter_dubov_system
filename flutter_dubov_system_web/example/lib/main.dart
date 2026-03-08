@@ -5,6 +5,14 @@ void main() {
   runApp(const DubovExampleApp());
 }
 
+class TestResult {
+  final String name;
+  final bool passed;
+  final String? error;
+
+  TestResult(this.name, this.passed, [this.error]);
+}
+
 /// A pure Dart class to hold the player's state between rounds,
 /// simulating data you might save to a local database like SQLite or Hive.
 class PlayerData {
@@ -34,6 +42,8 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
   String _errorMessage = '';
   int _currentRound = 0;
   List<MatchPairing> _currentPairings = [];
+  List<TestResult> _testResults = [];
+  bool _isRunningTests = false;
 
   // This is our "Database".
   final List<PlayerData> _database = [
@@ -82,6 +92,105 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
         _errorMessage = "Initialization Failed: ${e.toString()}";
       });
     }
+  }
+
+  Future<void> _runTests() async {
+    setState(() {
+      _isRunningTests = true;
+      _testResults = [];
+    });
+
+    final results = <TestResult>[];
+
+    void expect(bool condition, String message) {
+      if (!condition) throw Exception(message);
+    }
+
+    Future<void> runTest(String name, Future<void> Function() body) async {
+      try {
+        await body();
+        results.add(TestResult(name, true));
+      } catch (e) {
+        results.add(TestResult(name, false, e.toString()));
+      }
+    }
+
+    await runTest('Player basic properties', () async {
+      final p = _ds.createPlayer('Test', 2000, 1, 0.5);
+      try {
+        expect(p.name == 'Test', 'Name mismatch: ${p.name}');
+        expect(p.rating == 2000, 'Rating mismatch: ${p.rating}');
+        expect(p.id == 1, 'ID mismatch: ${p.id}');
+        expect(p.points == 0.5, 'Points mismatch: ${p.points}');
+      } finally {
+        p.dispose();
+      }
+    });
+
+    await runTest('Player points update', () async {
+      final p = _ds.createPlayer('Test', 2000, 1, 0.0);
+      try {
+        p.addPoints(1.0);
+        expect(p.points == 1.0, 'Points did not update');
+      } finally {
+        p.dispose();
+      }
+    });
+
+    await runTest('Tournament object identity', () async {
+      final t = _ds.createTournament(3);
+      final p1 = _ds.createPlayer('P1', 2500, 1, 0.0);
+      try {
+        t.addPlayer(p1);
+        final players = t.players;
+        expect(players.length == 1, 'Player count mismatch');
+        expect(identical(players[0], p1), 'Identity mismatch! Expected same object instance.');
+        
+        players[0].addPoints(2.0);
+        expect(p1.points == 2.0, 'State sync failed');
+      } finally {
+        p1.dispose();
+        t.dispose();
+      }
+    });
+
+    await runTest('Pairing identity and bye handling', () async {
+      final t = _ds.createTournament(3);
+      final p1 = _ds.createPlayer('P1', 2500, 1, 0.0);
+      final p2 = _ds.createPlayer('P2', 2400, 2, 0.0);
+      final p3 = _ds.createPlayer('P3', 2300, 3, 0.0);
+      try {
+        t.addPlayer(p1);
+        t.addPlayer(p2);
+        t.addPlayer(p3);
+        
+        t.setRound1Color(true);
+        final pairings = t.generatePairings(1);
+        
+        expect(pairings.length == 2, 'Should have 2 pairings for 3 players');
+        
+        final byeMatch = pairings.firstWhere((m) => m.isBye);
+        final normalMatch = pairings.firstWhere((m) => !m.isBye);
+        
+        // Verify identity in pairings
+        bool whiteFound = identical(normalMatch.white, p1) || identical(normalMatch.white, p2) || identical(normalMatch.white, p3);
+        bool blackFound = identical(normalMatch.black, p1) || identical(normalMatch.black, p2) || identical(normalMatch.black, p3);
+        
+        expect(whiteFound, 'White player identity mismatch');
+        expect(blackFound, 'Black player identity mismatch');
+        expect(identical(byeMatch.white, byeMatch.black), 'Bye match white/black should be same object');
+      } finally {
+        p1.dispose();
+        p2.dispose();
+        p3.dispose();
+        t.dispose();
+      }
+    });
+
+    setState(() {
+      _testResults = results;
+      _isRunningTests = false;
+    });
   }
 
   /// This function takes our Dart `PlayerData` and manually reconstructs
@@ -176,6 +285,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
       setState(() {
         _currentPairings = pairings;
         _errorMessage = '';
+        _testResults = []; // Clear tests when showing tournament
       });
     } catch (e) {
       setState(() {
@@ -190,11 +300,20 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+        useMaterial3: true,
       ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Stateless Dubov Example'),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          actions: [
+            if (_isInitialized)
+              IconButton(
+                onPressed: _isRunningTests ? null : _runTests,
+                icon: const Icon(Icons.playlist_add_check),
+                tooltip: 'Run Tests',
+              ),
+          ],
         ),
         body: Center(
           child: _errorMessage.isNotEmpty
@@ -204,63 +323,124 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
                 )
               : !_isInitialized
               ? const CircularProgressIndicator()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _currentRound == 0
-                          ? 'Tournament Ready'
-                          : 'Round $_currentRound Pairings',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    if (_currentPairings.isNotEmpty)
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: _currentPairings.length,
-                          itemBuilder: (context, index) {
-                            final match = _currentPairings[index];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 8.0,
-                              ),
-                              child: ListTile(
-                                title: Text(
-                                  match.isBye
-                                      ? '${match.white.name} - BYE'
-                                      : '⚪ ${match.white.name}  vs  ⚫ ${match.black.name}',
-                                ),
-                                subtitle: Text(
-                                  'Points: ${match.white.points} vs ${match.black.points}',
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ElevatedButton(
-                        onPressed: _currentRound < 3
-                            ? _generateNextRound
-                            : null,
-                        child: Text(
-                          _currentRound == 0
-                              ? 'Start Round 1'
-                              : 'Simulate Results & Generate Round ${_currentRound + 1}',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              : _testResults.isNotEmpty
+                  ? _buildTestResults()
+                  : _isRunningTests
+                      ? const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Running validation tests...'),
+                          ],
+                        )
+                      : _buildTournamentView(),
         ),
       ),
+    );
+  }
+
+  Widget _buildTestResults() {
+    final passedCount = _testResults.where((r) => r.passed).length;
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          color: passedCount == _testResults.length ? Colors.green.shade100 : Colors.orange.shade100,
+          child: Row(
+            children: [
+              Icon(
+                passedCount == _testResults.length ? Icons.check_circle : Icons.warning,
+                color: passedCount == _testResults.length ? Colors.green : Colors.orange,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Tests: $passedCount / ${_testResults.length} Passed',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => setState(() => _testResults = []),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _testResults.length,
+            itemBuilder: (context, index) {
+              final result = _testResults[index];
+              return ListTile(
+                leading: Icon(
+                  result.passed ? Icons.check : Icons.close,
+                  color: result.passed ? Colors.green : Colors.red,
+                ),
+                title: Text(result.name),
+                subtitle: result.error != null ? Text(result.error!, style: const TextStyle(color: Colors.red)) : null,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTournamentView() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          _currentRound == 0
+              ? 'Tournament Ready'
+              : 'Round $_currentRound Pairings',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        if (_currentPairings.isNotEmpty)
+          Expanded(
+            child: ListView.builder(
+              itemCount: _currentPairings.length,
+              itemBuilder: (context, index) {
+                final match = _currentPairings[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      match.isBye
+                          ? '${match.white.name} - BYE'
+                          : '⚪ ${match.white.name}  vs  ⚫ ${match.black.name}',
+                    ),
+                    subtitle: Text(
+                      'Points: ${match.white.points} vs ${match.black.points}',
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: _currentRound < 3
+                ? _generateNextRound
+                : null,
+            child: Text(
+              _currentRound == 0
+                  ? 'Start Round 1'
+                  : 'Simulate Results & Generate Round ${_currentRound + 1}',
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
