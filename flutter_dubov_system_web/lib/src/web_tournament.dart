@@ -7,7 +7,7 @@ import 'package:flutter_dubov_system_web/src/web_player.dart';
 class WebTournament extends Tournament {
   final DubovModule _module;
   late final JSTournament _wasmTournament;
-  
+
   /// Cache to map player IDs to Dart WebPlayer objects.
   final Map<int, WebPlayer> _playerCache = {};
 
@@ -60,17 +60,11 @@ class WebTournament extends Tournament {
           // Retrieve the original Dart objects from the cache using IDs
           final whiteId = m.white.getID().toDartInt;
           final blackId = m.black.getID().toDartInt;
-          
+
           final whitePlayer = _playerCache[whiteId]!;
           final blackPlayer = _playerCache[blackId] ?? whitePlayer;
 
-          matches.add(
-            MatchPairing(
-              whitePlayer,
-              blackPlayer,
-              m.is_bye.toDart,
-            ),
-          );
+          matches.add(MatchPairing(whitePlayer, blackPlayer, m.is_bye.toDart));
         } finally {
           m.delete();
         }

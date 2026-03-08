@@ -1,9 +1,9 @@
-## 1.0.0
+## 1.0.2
 
-### Added
+- **Fixed WASM Memory Leak**: Resolved an issue where player handles were leaked during player listing and pairing generation on the web.
+- **Improved Object Identity**: Implemented a `_playerCache` to ensure `Tournament.players` and `MatchPairing` return stable, identical JS-backed Dart objects.
+- **Added In-UI Test Runner**: The example app now includes a built-in test runner to verify the integrity and identity of the WASM implementation.
 
-- Exposed missing player evaluation and history methods from the native C++ engine to the Dart platform interface.
-- Added getters for opponent history metrics: `ARO` (Average Rating of Opponents) and `oppCount`.
-- Added methods to evaluate floating rules: `canUpfloat`, `getNumUpfloatedIfMaxUpfloater`, and `upfloatedPreviously`.
-- Added color history evaluation tools: `firstColorPlayed`, `isColorHistEqual`, and `shouldAlternate`.
-- Added match eligibility checks: `canPlayOpp` and `hasReceivedBye`.
+## 1.0.1
+
+- Initial release of the web implementation.

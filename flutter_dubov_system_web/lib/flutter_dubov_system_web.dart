@@ -11,13 +11,17 @@ export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_pla
 @JS('DubovSystem')
 external JSPromise<DubovModule> _initDubovSystem([DubovModuleConfig config]);
 
+/// Web implementation of the Dubov System plugin using WebAssembly.
 class DubovSystemWeb extends PlatformDubovSystem {
+  /// Constructs a [DubovSystemWeb].
   DubovSystemWeb() : super();
 
+  /// Registers this class as the default instance of [PlatformDubovSystem].
   static void registerWith(Registrar registrar) {
     PlatformDubovSystem.instance = DubovSystemWeb();
   }
 
+  /// The internal WebAssembly module instance.
   DubovModule? _module;
 
   @override

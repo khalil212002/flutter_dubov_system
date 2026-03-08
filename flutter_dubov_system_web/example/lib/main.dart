@@ -144,8 +144,11 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
         t.addPlayer(p1);
         final players = t.players;
         expect(players.length == 1, 'Player count mismatch');
-        expect(identical(players[0], p1), 'Identity mismatch! Expected same object instance.');
-        
+        expect(
+          identical(players[0], p1),
+          'Identity mismatch! Expected same object instance.',
+        );
+
         players[0].addPoints(2.0);
         expect(p1.points == 2.0, 'State sync failed');
       } finally {
@@ -163,22 +166,31 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
         t.addPlayer(p1);
         t.addPlayer(p2);
         t.addPlayer(p3);
-        
+
         t.setRound1Color(true);
         final pairings = t.generatePairings(1);
-        
+
         expect(pairings.length == 2, 'Should have 2 pairings for 3 players');
-        
+
         final byeMatch = pairings.firstWhere((m) => m.isBye);
         final normalMatch = pairings.firstWhere((m) => !m.isBye);
-        
+
         // Verify identity in pairings
-        bool whiteFound = identical(normalMatch.white, p1) || identical(normalMatch.white, p2) || identical(normalMatch.white, p3);
-        bool blackFound = identical(normalMatch.black, p1) || identical(normalMatch.black, p2) || identical(normalMatch.black, p3);
-        
+        bool whiteFound =
+            identical(normalMatch.white, p1) ||
+            identical(normalMatch.white, p2) ||
+            identical(normalMatch.white, p3);
+        bool blackFound =
+            identical(normalMatch.black, p1) ||
+            identical(normalMatch.black, p2) ||
+            identical(normalMatch.black, p3);
+
         expect(whiteFound, 'White player identity mismatch');
         expect(blackFound, 'Black player identity mismatch');
-        expect(identical(byeMatch.white, byeMatch.black), 'Bye match white/black should be same object');
+        expect(
+          identical(byeMatch.white, byeMatch.black),
+          'Bye match white/black should be same object',
+        );
       } finally {
         p1.dispose();
         p2.dispose();
@@ -324,17 +336,17 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
               : !_isInitialized
               ? const CircularProgressIndicator()
               : _testResults.isNotEmpty
-                  ? _buildTestResults()
-                  : _isRunningTests
-                      ? const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 16),
-                            Text('Running validation tests...'),
-                          ],
-                        )
-                      : _buildTournamentView(),
+              ? _buildTestResults()
+              : _isRunningTests
+              ? const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Running validation tests...'),
+                  ],
+                )
+              : _buildTournamentView(),
         ),
       ),
     );
@@ -346,12 +358,18 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          color: passedCount == _testResults.length ? Colors.green.shade100 : Colors.orange.shade100,
+          color: passedCount == _testResults.length
+              ? Colors.green.shade100
+              : Colors.orange.shade100,
           child: Row(
             children: [
               Icon(
-                passedCount == _testResults.length ? Icons.check_circle : Icons.warning,
-                color: passedCount == _testResults.length ? Colors.green : Colors.orange,
+                passedCount == _testResults.length
+                    ? Icons.check_circle
+                    : Icons.warning,
+                color: passedCount == _testResults.length
+                    ? Colors.green
+                    : Colors.orange,
               ),
               const SizedBox(width: 12),
               Text(
@@ -377,7 +395,12 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
                   color: result.passed ? Colors.green : Colors.red,
                 ),
                 title: Text(result.name),
-                subtitle: result.error != null ? Text(result.error!, style: const TextStyle(color: Colors.red)) : null,
+                subtitle: result.error != null
+                    ? Text(
+                        result.error!,
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    : null,
               );
             },
           ),
@@ -394,10 +417,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
           _currentRound == 0
               ? 'Tournament Ready'
               : 'Round $_currentRound Pairings',
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
 
@@ -430,9 +450,7 @@ class _DubovExampleAppState extends State<DubovExampleApp> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-            onPressed: _currentRound < 3
-                ? _generateNextRound
-                : null,
+            onPressed: _currentRound < 3 ? _generateNextRound : null,
             child: Text(
               _currentRound == 0
                   ? 'Start Round 1'

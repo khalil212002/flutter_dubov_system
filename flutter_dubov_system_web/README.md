@@ -1,23 +1,25 @@
 # flutter_dubov_system_web
 
-The web implementation of the `flutter_dubov_system` plugin, bringing **FIDE-approved chess tournament pairings** to Flutter Web.
+The web platform implementation of `flutter_dubov_system`.
 
-This package enables high-performance, official **Swiss system matchmaking** directly in your browser by utilizing the renowned CPPDubovSystem C++ engine compiled to **WebAssembly (WASM)**. It is the perfect solution for building scalable, web-based chess tournament managers and companion apps.
+This package provides the Flutter Web support for the `flutter_dubov_system` plugin by compiling the **FIDE-compliant CPPDubovSystem** C++ engine to WebAssembly (WASM).
 
 ## Features
 
-- The officially endorsed web implementation for the `flutter_dubov_system` chess plugin.
-- Leverages **WebAssembly (`dubov.wasm`)** to bring the native C++ performance of complex chess pairing algorithms directly to Flutter Web.
-- Utilizes `dart:js_interop` to seamlessly bridge the Dart framework with the compiled FIDE chess engine logic.
-- Fully supports player creation, **Elo rating management**, color allocation (White/Black), and automated round pairings according to strict **International Chess Federation (FIDE)** rules.
+- **Near-Native Performance**: Leverages WebAssembly to execute complex pairing algorithms at near-native speeds in the browser.
+- **WASM Interop**: Uses modern `dart:js_interop` to communicate between Dart and the WASM runtime.
+- **Bundled Assets**: The `dubov.wasm` and `dubov.js` binaries are securely bundled with the package for easy deployment.
+- **Stable Object Identity**: Ensures consistent object instances for players and tournaments, facilitating easier state management in web apps.
 
 ## Usage
 
-This package is **not** intended to be depended on directly by app developers. It is automatically endorsed and utilized by the framework when you use the main `flutter_dubov_system` package and build your chess app for a web target.
+**This package is not meant to be used directly.** It is an endorsed implementation package for `flutter_dubov_system`.
 
-To use the Dubov System in your Flutter project, simply add the main package to your project:
+If you want to use the Dubov pairing system in your Flutter app, please depend on the main package:
 
 ```yaml
 dependencies:
-  flutter_dubov_system: ^0.0.1
+  flutter_dubov_system: ^1.0.2
 ```
+
+For documentation, usage examples, and more information, please refer to the [flutter_dubov_system main package](https://pub.dev/packages/flutter_dubov_system).
