@@ -7,9 +7,12 @@ export 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_pla
 import 'package:flutter_dubov_system_native/flutter_dubov_system_native_bindings_generated.dart'
     as bindings;
 
+/// Native implementation of the Dubov System plugin using Dart FFI.
 class DubovSystemNative extends PlatformDubovSystem {
+  /// Constructs a [DubovSystemNative].
   DubovSystemNative() : super();
 
+  /// Registers this class as the default instance of [PlatformDubovSystem].
   static void registerWith() {
     PlatformDubovSystem.instance = DubovSystemNative();
   }

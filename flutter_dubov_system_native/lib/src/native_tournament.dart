@@ -4,12 +4,14 @@ import 'package:flutter_dubov_system_native/src/native_player.dart';
 import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_platform_interface.dart';
 import 'dart:ffi';
 
+/// Native implementation of [Tournament] using FFI to communicate with the C++ engine.
 class NativeTournament extends Tournament {
   late final bindings.TournamentHandle _cppTournament;
-  
+
   /// Cache to map C++ player addresses to Dart NativePlayer objects.
   final Map<int, NativePlayer> _playerCache = {};
 
+  /// Constructs a [NativeTournament] with the given number of [totalRounds].
   NativeTournament(int totalRounds) : super(totalRounds) {
     _cppTournament = bindings.create_tournament(totalRounds);
   }
@@ -57,11 +59,11 @@ class NativeTournament extends Tournament {
 
       for (int i = 0; i < matches.count; i++) {
         final bindings.MatchHandle matchStruct = matches.ptr[i];
-        
+
         // Retrieve the original Dart objects from the cache
         final whitePlayer = _playerCache[matchStruct.white.address]!;
-        final blackPlayer = matchStruct.black.address != 0 
-            ? _playerCache[matchStruct.black.address]! 
+        final blackPlayer = matchStruct.black.address != 0
+            ? _playerCache[matchStruct.black.address]!
             : whitePlayer; // Fallback for byes if needed, though isBye handles it
 
         pairings.add(

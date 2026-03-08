@@ -4,18 +4,23 @@ import 'package:flutter_dubov_system_platform_interface/flutter_dubov_system_pla
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
+/// Native implementation of [Player] using FFI to communicate with the C++ engine.
 class NativePlayer extends Player {
   late final bindings.PlayerHandle _cppPlayer;
+
+  /// Constructs a [NativePlayer] with default values.
   NativePlayer() {
     _cppPlayer = bindings.create_player_default();
   }
 
+  /// Constructs a [NativePlayer] with the given [name], [rating], [id], and [points].
   NativePlayer.create(String name, int rating, int id, double points) {
     Pointer<Utf8> pt = name.toNativeUtf8();
     _cppPlayer = bindings.create_player(pt.cast<Char>(), rating, id, points);
     malloc.free(pt);
   }
 
+  /// The underlying C++ player handle.
   bindings.PlayerHandle get toCpp => _cppPlayer;
 
   @override

@@ -1,8 +1,14 @@
 name: flutter_dubov_system_native
-description: Native platform implementation of flutter_dubov_system. Uses Dart FFI to wrap the FIDE-approved CPPDubovSystem C++ engine for desktop and mobile platforms.
-version: 1.0.0
+description: Native platform implementation of flutter_dubov_system. Uses Dart FFI to wrap the FIDE-compliant CPPDubovSystem engine for mobile and desktop.
+version: 1.0.2
 homepage: https://github.com/khalil212002/flutter_dubov_system
-repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system_web
+repository: https://github.com/khalil212002/flutter_dubov_system/tree/master/flutter_dubov_system_native
+topics:
+  - chess
+  - tournament
+  - ffi
+  - pairing
+  - native
 
 environment:
   sdk: ^3.11.0
@@ -15,7 +21,6 @@ dependencies:
   native_toolchain_c: ^0.17.4
   flutter_dubov_system_platform_interface: ^1.0.0
   ffi: ^2.2.0
-  native_assets_cli: ^0.18.0
 
 dev_dependencies:
   ffigen: ^20.1.1

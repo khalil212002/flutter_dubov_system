@@ -148,11 +148,11 @@ void main() {
 
       final players = tournament.players;
       expect(players.length, 2);
-      
+
       // Verify Object Identity: The player from the tournament IS the same instance
       expect(identical(players[0], p1), isTrue);
       expect(identical(players[1], p2), isTrue);
-      
+
       // Verify Shared State: Updating the player in the list updates the original
       players[0].addPoints(5.0);
       expect(p1.points, 5.0);
@@ -174,13 +174,27 @@ void main() {
       if (pairings.isNotEmpty) {
         final match = pairings.first;
         // Verify that players in the match pairing are the same instances we added
-        bool foundWhite = identical(match.white, p1) || identical(match.white, p2) || 
-                          identical(match.white, p3) || identical(match.white, p4);
-        bool foundBlack = identical(match.black, p1) || identical(match.black, p2) || 
-                          identical(match.black, p3) || identical(match.black, p4);
-        
-        expect(foundWhite, isTrue, reason: 'White player should be one of the original instances');
-        expect(foundBlack, isTrue, reason: 'Black player should be one of the original instances');
+        bool foundWhite =
+            identical(match.white, p1) ||
+            identical(match.white, p2) ||
+            identical(match.white, p3) ||
+            identical(match.white, p4);
+        bool foundBlack =
+            identical(match.black, p1) ||
+            identical(match.black, p2) ||
+            identical(match.black, p3) ||
+            identical(match.black, p4);
+
+        expect(
+          foundWhite,
+          isTrue,
+          reason: 'White player should be one of the original instances',
+        );
+        expect(
+          foundBlack,
+          isTrue,
+          reason: 'Black player should be one of the original instances',
+        );
       }
     });
   });

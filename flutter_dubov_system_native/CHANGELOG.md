@@ -1,9 +1,8 @@
-## 1.0.0
+## 1.0.2
 
-### Added
+- **Fixed Critical Memory Leak**: Resolved an issue where new player objects were created on every call to `getPlayers` or `generatePairingsBaku`, leading to dangling pointers and memory exhaustion.
+- **Improved Object Identity**: Implemented a `_playerCache` to ensure that `Tournament.players` returns stable, identical Dart object instances. This prevents redundant allocations and state synchronization issues.
 
-- Exposed missing player evaluation and history methods from the native C++ engine to the Dart platform interface.
-- Added getters for opponent history metrics: `ARO` (Average Rating of Opponents) and `oppCount`.
-- Added methods to evaluate floating rules: `canUpfloat`, `getNumUpfloatedIfMaxUpfloater`, and `upfloatedPreviously`.
-- Added color history evaluation tools: `firstColorPlayed`, `isColorHistEqual`, and `shouldAlternate`.
-- Added match eligibility checks: `canPlayOpp` and `hasReceivedBye`.
+## 1.0.1
+
+- Initial release of the native implementation.
