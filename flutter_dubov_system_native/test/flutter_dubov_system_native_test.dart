@@ -140,7 +140,7 @@ void main() {
       tournament.dispose();
     });
 
-    test('Adding players and counting works', () {
+    test('Adding players and counting works with object identity', () {
       tournament.addPlayer(p1);
       tournament.addPlayer(p2);
 
@@ -148,10 +148,17 @@ void main() {
 
       final players = tournament.players;
       expect(players.length, 2);
-      expect(players.first.name, 'P1');
+      
+      // Verify Object Identity: The player from the tournament IS the same instance
+      expect(identical(players[0], p1), isTrue);
+      expect(identical(players[1], p2), isTrue);
+      
+      // Verify Shared State: Updating the player in the list updates the original
+      players[0].addPoints(5.0);
+      expect(p1.points, 5.0);
     });
 
-    test('Generating pairings works and handles memory safely', () {
+    test('Generating pairings maintains object identity', () {
       tournament.addPlayer(p1);
       tournament.addPlayer(p2);
       tournament.addPlayer(p3);
@@ -166,9 +173,14 @@ void main() {
 
       if (pairings.isNotEmpty) {
         final match = pairings.first;
-        expect(match.white, isNotNull);
-        expect(match.black, isNotNull);
-        expect(match.isBye, isFalse);
+        // Verify that players in the match pairing are the same instances we added
+        bool foundWhite = identical(match.white, p1) || identical(match.white, p2) || 
+                          identical(match.white, p3) || identical(match.white, p4);
+        bool foundBlack = identical(match.black, p1) || identical(match.black, p2) || 
+                          identical(match.black, p3) || identical(match.black, p4);
+        
+        expect(foundWhite, isTrue, reason: 'White player should be one of the original instances');
+        expect(foundBlack, isTrue, reason: 'Black player should be one of the original instances');
       }
     });
   });

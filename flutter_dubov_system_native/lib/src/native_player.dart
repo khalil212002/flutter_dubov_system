@@ -10,10 +10,6 @@ class NativePlayer extends Player {
     _cppPlayer = bindings.create_player_default();
   }
 
-  NativePlayer.fromCpp(bindings.PlayerHandle cppPlayer) {
-    _cppPlayer = cppPlayer;
-  }
-
   NativePlayer.create(String name, int rating, int id, double points) {
     Pointer<Utf8> pt = name.toNativeUtf8();
     _cppPlayer = bindings.create_player(pt.cast<Char>(), rating, id, points);

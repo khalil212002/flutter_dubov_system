@@ -6,8 +6,13 @@
 #include "CPPDubovSystem/DubovSystem/Tournament.hpp"
 #include <vector>
 #include <string>
+#include <map>
+#include <algorithm>
 
 using namespace CPPDubovSystem;
+
+// Global map to track original player pointers for each tournament to ensure stable identity
+static std::map<void*, std::vector<void*>> tournament_to_players;
 
 extern "C" {
 
@@ -98,7 +103,7 @@ extern "C" {
 
         if (arr.count > 0) {
             arr.ptr = static_cast<int*>(malloc(arr.count * sizeof(int)));
-            for (int i = 0; i < arr.count; ++i) {
+            for (int i = 0; i < (int)arr.count; ++i) {
                 arr.ptr[i] = opps[i];
             }
         }
@@ -200,11 +205,15 @@ extern "C" {
     }
 
     FFI_PLUGIN_EXPORT void destroy_tournament(TournamentHandle tournament) {
-        if (tournament) delete static_cast<Tournament*>(tournament);
+        if (tournament) {
+            tournament_to_players.erase(tournament);
+            delete static_cast<Tournament*>(tournament);
+        }
     }
 
     FFI_PLUGIN_EXPORT void addPlayer(TournamentHandle tournament, PlayerHandle player) {
         static_cast<Tournament*>(tournament)->addPlayer(*static_cast<Player*>(player));
+        tournament_to_players[tournament].push_back(player);
     }
 
     FFI_PLUGIN_EXPORT void setRound1Color(TournamentHandle tournament, bool make_white) {
@@ -212,13 +221,24 @@ extern "C" {
     }
 
     FFI_PLUGIN_EXPORT PlayerArray getPlayers(TournamentHandle tournament) {
-        std::vector<Player> players = static_cast<Tournament*>(tournament)->getPlayers();
+        Tournament* t = static_cast<Tournament*>(tournament);
+        std::vector<Player> current_players = t->getPlayers(); // This is a copy from the engine
+        auto& originals = tournament_to_players[tournament];
+        
         PlayerArray arr;
-        arr.count = players.size();
+        arr.count = (int)current_players.size();
         if (arr.count > 0) {
             arr.ptr = static_cast<PlayerHandle*>(malloc(arr.count * sizeof(PlayerHandle)));
             for (int i = 0; i < arr.count; ++i) {
-                arr.ptr[i] = new Player(players[i]);
+                int id = current_players[i].getID();
+                PlayerHandle original = nullptr;
+                for (auto p : originals) {
+                    if (static_cast<Player*>(p)->getID() == id) {
+                        original = p;
+                        break;
+                    }
+                }
+                arr.ptr[i] = original; 
             }
         }
         else {
@@ -241,15 +261,29 @@ extern "C" {
     }
 
     FFI_PLUGIN_EXPORT MatchArray generatePairingsBaku(TournamentHandle tournament, int r, bool baku_acceleration) {
-        std::vector<Match> matches = static_cast<Tournament*>(tournament)->generatePairings(r, baku_acceleration);
+        Tournament* t = static_cast<Tournament*>(tournament);
+        std::vector<Match> matches = t->generatePairings(r, baku_acceleration);
+        auto& originals = tournament_to_players[tournament];
+        
         MatchArray arr;
-        arr.count = matches.size();
+        arr.count = (int)matches.size();
 
         if (arr.count > 0) {
             arr.ptr = static_cast<MatchHandle*>(malloc(arr.count * sizeof(MatchHandle)));
             for (int i = 0; i < arr.count; ++i) {
-                arr.ptr[i].white = new Player(matches[i].white);
-                arr.ptr[i].black = new Player(matches[i].black);
+                PlayerHandle white_ptr = nullptr;
+                PlayerHandle black_ptr = nullptr;
+                
+                int white_id = matches[i].white.getID();
+                int black_id = matches[i].black.getID();
+
+                for(auto p : originals) {
+                    if (static_cast<Player*>(p)->getID() == white_id) white_ptr = p;
+                    if (static_cast<Player*>(p)->getID() == black_id) black_ptr = p;
+                }
+                
+                arr.ptr[i].white = white_ptr;
+                arr.ptr[i].black = black_ptr;
                 arr.ptr[i].is_bye = matches[i].is_bye;
             }
         }

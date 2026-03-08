@@ -6,6 +6,9 @@ import 'dart:ffi';
 
 class NativeTournament extends Tournament {
   late final bindings.TournamentHandle _cppTournament;
+  
+  /// Cache to map C++ player addresses to Dart NativePlayer objects.
+  final Map<int, NativePlayer> _playerCache = {};
 
   NativeTournament(int totalRounds) : super(totalRounds) {
     _cppTournament = bindings.create_tournament(totalRounds);
@@ -13,11 +16,15 @@ class NativeTournament extends Tournament {
 
   @override
   void addPlayer(Player p) {
-    bindings.addPlayer(_cppTournament, (p as NativePlayer).toCpp);
+    final nativePlayer = p as NativePlayer;
+    // Cache the player using its C++ address
+    _playerCache[nativePlayer.toCpp.address] = nativePlayer;
+    bindings.addPlayer(_cppTournament, nativePlayer.toCpp);
   }
 
   @override
   void dispose() {
+    _playerCache.clear();
     bindings.destroy_tournament(_cppTournament);
   }
 
@@ -50,12 +57,12 @@ class NativeTournament extends Tournament {
 
       for (int i = 0; i < matches.count; i++) {
         final bindings.MatchHandle matchStruct = matches.ptr[i];
-        final NativePlayer whitePlayer = NativePlayer.fromCpp(
-          matchStruct.white,
-        );
-        final NativePlayer blackPlayer = NativePlayer.fromCpp(
-          matchStruct.black,
-        );
+        
+        // Retrieve the original Dart objects from the cache
+        final whitePlayer = _playerCache[matchStruct.white.address]!;
+        final blackPlayer = matchStruct.black.address != 0 
+            ? _playerCache[matchStruct.black.address]! 
+            : whitePlayer; // Fallback for byes if needed, though isBye handles it
 
         pairings.add(
           MatchPairing(whitePlayer, blackPlayer, matchStruct.is_bye),
@@ -79,8 +86,8 @@ class NativeTournament extends Tournament {
         return playerList;
       }
       for (int i = 0; i < cppPlayers.count; i++) {
-        final cpp = cppPlayers.ptr[i];
-        playerList.add(NativePlayer.fromCpp(cpp));
+        final address = cppPlayers.ptr[i].address;
+        playerList.add(_playerCache[address]!);
       }
       return playerList;
     } finally {

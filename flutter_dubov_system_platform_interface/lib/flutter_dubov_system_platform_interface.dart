@@ -1,10 +1,10 @@
 import 'package:flutter_dubov_system_platform_interface/src/platform_player.dart';
-import 'package:flutter_dubov_system_platform_interface/src/platfrom_tournament.dart';
+import 'package:flutter_dubov_system_platform_interface/src/platform_tournament.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 export "src/platform_player.dart";
 export "src/platform_color.dart";
 export "src/platform_color_preference.dart";
-export "src/platfrom_tournament.dart";
+export "src/platform_tournament.dart";
 export "src/platform_match.dart";
 
 /// The common platform interface for the Dubov System plugin.
