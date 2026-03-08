@@ -1,3 +1,9 @@
+/// The common platform interface for the [flutter_dubov_system] plugin.
+///
+/// This library defines the standard interface and base classes for
+/// FIDE-compliant chess pairing logic across all platforms.
+library flutter_dubov_system_platform_interface;
+
 import 'package:flutter_dubov_system_platform_interface/src/platform_player.dart';
 import 'package:flutter_dubov_system_platform_interface/src/platform_tournament.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -44,6 +50,9 @@ abstract class PlatformDubovSystem extends PlatformInterface {
 /// Throws an [UnimplementedError] for all methods until a platform-specific
 /// implementation is registered.
 class DefaultDubovSystem extends PlatformDubovSystem {
+  /// Default constructor for [DefaultDubovSystem].
+  DefaultDubovSystem();
+
   @override
   Future<void> initialize() {
     throw UnimplementedError();

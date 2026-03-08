@@ -1,9 +1,8 @@
-## 1.0.0
+## 1.0.2
 
-### Added
+- Fixed a spelling error in `platform_tournament.dart` (`platfrom` -> `platform`).
+- Unified versioning across federated packages.
 
-- Exposed missing player evaluation and history methods from the native C++ engine to the Dart platform interface.
-- Added getters for opponent history metrics: `ARO` (Average Rating of Opponents) and `oppCount`.
-- Added methods to evaluate floating rules: `canUpfloat`, `getNumUpfloatedIfMaxUpfloater`, and `upfloatedPreviously`.
-- Added color history evaluation tools: `firstColorPlayed`, `isColorHistEqual`, and `shouldAlternate`.
-- Added match eligibility checks: `canPlayOpp` and `hasReceivedBye`.
+## 1.0.1
+
+- Initial release of the common platform interface.
